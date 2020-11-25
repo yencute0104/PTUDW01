@@ -10,5 +10,5 @@ exports.index = (req, res, next) => {
 
 exports.detail = (req,res, next) => {
     
-    res.render('detail', bookModel.get(req.params.id)) ;
+    res.render('detail', bookModel.get(parseInt(req.params.id))) ;
 };
