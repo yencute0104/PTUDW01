@@ -1,7 +1,7 @@
 var express = require('express');
 const { route } = require('.');
 var router = express.Router();
-const indexController = require('../controllers/bookController');
+const indexController = require('../controllers/listController');
 const userController = require('../controllers/userController');
 
 /* GET list of books. */
