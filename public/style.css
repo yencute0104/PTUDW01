@@ -6193,6 +6193,12 @@ section.wn_contact_area {
   left: 30px;
   right: 30px;
 }
+
+.size__cover{
+  width: 270px;
+  height: 340px;
+}
+
 @media only screen and (min-width: 1601px) and (max-width: 1919px) {
 .wrapper-boxed-layout {
 	margin: 0 70px;
