@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 const hbs = require('hbs');
+const fs = require('fs');
 const { MongoClient } = require("mongodb");
 
 const indexRouter = require('./routes/index');
@@ -15,6 +16,10 @@ const listRouter = require('./routes/list');
 require('./dal/db');
 
 const app = express();
+hbs.registerPartials(__dirname + '/views/partials');
+hbs.registerPartial('bestseller', fs.readFileSync(__dirname + '/views/partials/bestseller.hbs', 'utf8'));
+hbs.registerPartial('related', fs.readFileSync(__dirname + '/views/partials/related.hbs', 'utf8'));
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

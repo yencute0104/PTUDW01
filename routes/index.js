@@ -7,6 +7,9 @@ const listController = require('../controllers/listController');
 /* GET list of books. */
 router.get('/', indexController.index);
 router.get('/account', userController.account);
+router.get('/listbook', listController.index);
+router.get('/:id',listController.detail );
+
 //router.get('/:id', listController.detail);
 // /* GET home page. */
 // router.get('/', function(req, res, next) {
