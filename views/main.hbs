@@ -2,6 +2,7 @@
 <html class="no-js" lang="zxx">
 <head>
 	<meta charset="utf-8">
+	<title>{{title}}</title>
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -225,9 +226,9 @@
 		<div class="brown--color box-search-content search_active block-bg close__top">
 			<form id="search_mini_form" class="minisearch" action="#">
 				<div class="field__search">
-					<input type="text" placeholder="Search entire store here...">
+					<input type="text" name="search"  placeholder="Tìm sản phẩm">
 					<div class="action">
-						<a href="#"><i class="zmdi zmdi-search"></i></a>
+						<a href="?catid={{catID}}&search={{nameSearch}}"><i class="zmdi zmdi-search"></i></a>
 					</div>
 				</div>
 			</form>

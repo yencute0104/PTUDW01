@@ -1,16 +1,38 @@
-const {db} = require('../dal/db');
+//const {db} = require('../dal/db');
 const { ObjectId} = require('mongodb');
+const booksCollection = require('./MongooseModel/bookMongooseModel');
+const categoryCollection = require ('./MongooseModel/categoryMongooseModel');
+
+exports.listcategory = async () => {
+    //console.log('model db');
+    //const booksCollection = db().collection('Books');
+    const cat = await categoryCollection.find({});
+    return cat;
+}
+
+exports.get_name_cat = async (id) => {
+    const nameCat = await categoryCollection.findOne({_id: ObjectId(id)});
+    return nameCat.catogory;
+}
 
 exports.list = async () => {
     console.log('model db');
-    const booksCollection = db().collection('Books');
-    const books = await booksCollection.find({}).toArray();
-    console.dir(books);
+    //const booksCollection = db().collection('Books');
+    const books = await booksCollection.find({isDeleted: false});
+    //console.dir(books);
+    return books;
+}
+exports.listbook = async (filter, pageNumber, itemPerPage) => {
+    //const booksCollection = db().collection('Books');
+    let books = await booksCollection.paginate(filter, {
+        page: pageNumber,
+        limit: itemPerPage,
+    });
     return books;
 }
 
 exports.get = async (id) => {
-    const booksCollection = db().collection('Books');
+    //const booksCollection = db().collection('Books');
     const book = await booksCollection.findOne({_id: ObjectId(id)})
     return book;
 }

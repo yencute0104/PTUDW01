@@ -3,28 +3,39 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const Handlebars = require('handlebars');
+const hbs = require('express-handlebars');
+const helpers = require('handlebars-helpers')();
 
-const hbs = require('hbs');
 const fs = require('fs');
 const { MongoClient } = require("mongodb");
+const mongoose = require('./dal/db');
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+mongoose.mongoose();
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const booksRouter = require('./routes/home');
 const listRouter = require('./routes/list');
 
-require('./dal/db');
-
 const app = express();
-hbs.registerPartials(__dirname + '/views/partials');
-hbs.registerPartial('bestseller', fs.readFileSync(__dirname + '/views/partials/bestseller.hbs', 'utf8'));
-hbs.registerPartial('related', fs.readFileSync(__dirname + '/views/partials/related.hbs', 'utf8'));
+
+// hbs.registerPartials(__dirname + '/views/partials');
+// hbs.registerPartial('bestseller', fs.readFileSync(__dirname + '/views/partials/bestseller.hbs', 'utf8'));
+// hbs.registerPartial('related', fs.readFileSync(__dirname + '/views/partials/related.hbs', 'utf8'));
 
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-
+app.engine('hbs', hbs({ 
+  extname:'hbs', 
+  helpers: helpers,
+  defaultView: 'default',
+  layoutsDir: __dirname + '/views',
+  handlebars: allowInsecurePrototypeAccess(Handlebars)
+ }));
+ 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

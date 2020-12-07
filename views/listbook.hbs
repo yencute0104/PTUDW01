@@ -9,13 +9,9 @@
                     <aside class="wedget__categories poroduct--cat">
                         <h3 class="wedget__title">Danh mục sản phẩm</h3>
                         <ul>
-                            <li><a href="#">Văn học<span>(3)</span></a></li>
-                            <li><a href="#">Thiếu nhi <span>(4)</span></a></li>
-                            <li><a href="#">Kinh tế <span>(6)</span></a></li>
-                            <li><a href="#">Tâm lý - Kỹ năng sống <span>(7)</span></a></li>
-                            <li><a href="#">Tiểu sử - Hồi ký <span>(8)</span></a></li>
-                            <li><a href="#">Sách giáo khoa - tham khảo <span>(9)</span></a></li>
-                            <li><a href="#">Sách ngoại ngữ <span>(13)</span></a></li>
+                            {{#each category}}
+                                <li><a href="?catid={{_id}}&search={{nameSearch}}">{{catogory}}</a></li>
+                            {{/each}}
                         </ul>
                     </aside>
                     <aside class="wedget__categories pro--range">
@@ -41,13 +37,9 @@
                     <aside class="wedget__categories poroduct--tag">
                         <h3 class="wedget__title">Thẻ</h3>
                         <ul>
-                            <li><a href="#">Văn học</a></li>
-                            <li><a href="#">Thiếu nhi</a></li>
-                            <li><a href="#">Tâm lý - Kỹ năng sống</a></li>
-                            <li><a href="#">Tiểu sử - Hồi Ký</a></li>
-                            <li><a href="#">Sách giáo khoa - tham khảo</a></li>
-                            <li><a href="#">Kinh tế</a></li>
-                            <li><a href="#">Sách ngoại ngữ</a></li>
+                            {{#each category}}
+                                <li><a href="?catid={{_id}}&search={{nameSearch}}">{{catogory}}</a></li>
+                            {{/each}}
                         </ul>
                     </aside>
                     <aside class="wedget__categories sidebar--banner">
@@ -67,7 +59,7 @@
                                 <a class="nav-item nav-link active" data-toggle="tab" href="#nav-grid" role="tab"><i class="fa fa-th"></i></a>
                                 <a class="nav-item nav-link" data-toggle="tab" href="#nav-list" role="tab"><i class="fa fa-list"></i></a>
                             </div>
-                            <p>Showing 1–12 of 40 results</p>
+                            <p>Số lượng: {{totalBooks}} sản phẩm </p>
                             <div class="orderby__wrapper">
                                 <span>Sắp xếp</span>
                                 <select class="shot__byselect">
@@ -125,13 +117,51 @@
                             {{/each}}
                             <!-- End Single Product -->
                         </div>
-                        <ul class="wn__pagination">
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#"><i class="zmdi zmdi-chevron-right"></i></a></li>
-                        </ul>
+
+                <nav aria-label="Page navigation example" style="..."> 
+                  <ul class="wn__pagination">
+                    {{#isnt currentPage 1}}
+                    <li>
+                        <a href="/listbook?page={{prevPage}}&catid={{catID}}&search={{nameSearch}}">
+                          <span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span>
+                        </a>
+                    </li>
+                    {{/isnt}}
+
+                    {{#if hasPreviousPage}}
+                    <li>
+                        <a href="/listbook?page={{prevPage}}&catid={{catID}}&search={{nameSearch}}">
+                          {{prevPage}}
+                        </a>
+                    </li>
+                    {{/if}}
+
+                    
+                  
+                    <li class="active">
+                        <a href="javascript:void(0)" tabindex="-1">
+                          {{currentPage}}
+                        </a>
+                    </li>
+
+                    {{#if hasNextPage}}
+                    <li>
+                        <a  href="/listbook?page={{nextPage}}&catid={{catID}}&search={{nameSearch}}">
+                          {{nextPage}}
+                        </a>
+                    </li>
+                    {{/if}}
+
+                    {{#gt lastPage currentPage}}
+                    <li>
+                        <a href="/listbook?page={{nextPage}}&catid={{catID}}&search={{nameSearch}}" >
+                          <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                    </li>
+                    {{/gt}}
+                  </ul>
+                  </nav>
+                       
                     </div>
                     <div class="shop-grid tab-pane fade" id="nav-list" role="tabpanel">
                         <div class="list__view__wrapper">
@@ -140,7 +170,6 @@
                             <div class="list__view">
                                 <div class="thumb">
                                     <a  href="/listbook/{{_id}}"><img class="size__cover" src="{{cover}}" alt="product images"></a>
-                                  
                                 </div>
                                 <div class="content">
                                     <h2><a href="/listbook/{{_id}}">{{title}}</a></h2>
