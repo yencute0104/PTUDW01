@@ -1,4 +1,3 @@
-//const {db} = require('../dal/db');
 const { ObjectId} = require('mongodb');
 const booksCollection = require('./MongooseModel/bookMongooseModel');
 const categoryCollection = require ('./MongooseModel/categoryMongooseModel');

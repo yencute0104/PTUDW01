@@ -166,7 +166,7 @@
 								</div>
 								<!-- End Shopping Cart -->
 							</li>
-							<li class="setting__bar__icon"><a class="setting__active" href="#"></a>
+							<li class="setting__bar__icon"><a class="setting__active" href="/account"></a>
 								<div class="searchbar__content setting__block">
 									<div class="content-inner">
 										<div class="switcher-currency">
@@ -178,10 +178,10 @@
 												<div class="switcher-currency-trigger">
 													<div class="setting__menu">
 													
-														<span><a href="#">Thông tin cá nhân</a></span>
-														<span><a href="#">Danh sách yêu thích</a></span>
-														<span><a href="#">Đăng nhập</a></span>
-														<span><a href="#">Thêm tài khoản</a></span>
+														<span><a href="/account/profile">Chỉnh sửa thông tin cá nhân</a></span>
+														<span><a href="/account/login">Đăng nhập</a></span>
+														<span><a href="/account/signin">Đăng ký</a></span>
+														<span><a href="/account/logout">Đăng xuất</a></span>
 													</div>
 												</div>
 											</div>
@@ -224,7 +224,7 @@
 		<!-- //Header -->
 		<!-- Start Search Popup -->
 		<div class="brown--color box-search-content search_active block-bg close__top">
-			<form id="search_mini_form" class="minisearch" action="#">
+			<form id="search_mini_form" class="minisearch" action="?catid={{catID}}&search={{nameSearch}}">
 				<div class="field__search">
 					<input type="text" name="search"  placeholder="Tìm sản phẩm">
 					<div class="action">
@@ -237,46 +237,7 @@
 			</div>
 		</div>
 		<!-- End Search Popup -->
-        <!-- Start Slider area -->
-        <div class="slider-area brown__nav slider--15 slide__activation slide__arrow01 owl-carousel owl-theme">
-        	<!-- Start Single Slide -->
-	        <div class="slide animation__style10 bg-image--1 fullscreen align__center--left">
-	            <div class="container">
-	            	<div class="row">
-	            		<div class="col-lg-12">
-	            			<div class="slider__content">
-		            			<div class="contentbox">
-		            				<h2>Buy <span>your </span></h2>
-		            				<h2>favourite <span>Book </span></h2>
-		            				<h2>from <span>Here </span></h2>
-				                   	<a class="shopbtn" href="/listbook">shop now</a>
-		            			</div>
-	            			</div>
-	            		</div>
-	            	</div>
-	            </div>
-            </div>
-            <!-- End Single Slide -->
-        	<!-- Start Single Slide -->
-	        <div class="slide animation__style10 bg-image--3 fullscreen align__center--left">
-	            <div class="container">
-	            	<div class="row">
-	            		<div class="col-lg-12">
-	            			<div class="slider__content">
-		            			<div class="contentbox">
-		            				<h2>Buy <span>your </span></h2>
-		            				<h2>favourite <span>Book </span></h2>
-		            				<h2>from <span>Here </span></h2>
-				                   	<a class="shopbtn" href="/listbook">shop now</a>
-		            			</div>
-	            			</div>
-	            		</div>
-	            	</div>
-	            </div>
-            </div>
-            <!-- End Single Slide -->
-        </div>
-        <!-- End Slider area -->
+       
 		<!-- Start BEst Seller Area -->
 		{{{body}}}
 		<!-- Best Sale Area Area -->

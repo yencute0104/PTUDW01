@@ -6,8 +6,8 @@ var logger = require('morgan');
 const Handlebars = require('handlebars');
 const hbs = require('express-handlebars');
 const helpers = require('handlebars-helpers')();
+require('dotenv').config();
 
-const fs = require('fs');
 const { MongoClient } = require("mongodb");
 const mongoose = require('./dal/db');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
@@ -16,7 +16,7 @@ mongoose.mongoose();
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const booksRouter = require('./routes/home');
-const listRouter = require('./routes/list');
+const listRouter = require('./routes/listbook');
 
 const app = express();
 
@@ -43,6 +43,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+//app.use('/account', indexRouter);
 app.use('/users', usersRouter);
 app.use('/home', indexRouter);
 app.use('/listbook',listRouter);

@@ -1,5 +1,7 @@
+const app = require('../app');
 var express = require('express');
 var router = express.Router();
+
 const listController = require('../controllers/listController');
 
 /* GET list of books. */

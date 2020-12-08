@@ -1,6 +1,7 @@
 const { render } = require('../app');
-const bookModel = require('../models/bookModel');
 const { ObjectId } = require('mongodb');
+
+const bookModel = require('../models/bookModel');
 const item_per_page = 2;
 
 exports.index = async (req, res, next) => {
