@@ -2,7 +2,7 @@ const { render } = require('../app');
 const { ObjectId } = require('mongodb');
 
 const bookModel = require('../models/bookModel');
-const item_per_page = 2;
+const item_per_page = 3;
 
 exports.index = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
@@ -19,7 +19,8 @@ exports.index = async (req, res, next) => {
     const filter = {};
     if (catid)
     {
-        filter.catID = ObjectId(catid);
+        if (nameCat != "Tất cả")
+            filter.catID = ObjectId(catid);
     }
     if (search)
     {

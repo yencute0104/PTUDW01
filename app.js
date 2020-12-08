@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser')
 var logger = require('morgan');
 const Handlebars = require('handlebars');
 const hbs = require('express-handlebars');
@@ -19,7 +20,7 @@ const booksRouter = require('./routes/home');
 const listRouter = require('./routes/listbook');
 
 const app = express();
-
+app.use(bodyParser.urlencoded({'extended':false}))
 // hbs.registerPartials(__dirname + '/views/partials');
 // hbs.registerPartial('bestseller', fs.readFileSync(__dirname + '/views/partials/bestseller.hbs', 'utf8'));
 // hbs.registerPartial('related', fs.readFileSync(__dirname + '/views/partials/related.hbs', 'utf8'));
@@ -47,7 +48,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/home', indexRouter);
 app.use('/listbook',listRouter);
-
 
 
 // catch 404 and forward to error handler
