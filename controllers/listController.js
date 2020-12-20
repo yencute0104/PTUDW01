@@ -1,14 +1,19 @@
 const { render } = require('../app');
 const { ObjectId } = require('mongodb');
+const queryString = require('query-string');
+const buildUrl = require('build-url');
 
 const bookModel = require('../models/bookModel');
-const item_per_page = 3;
+const { Query } = require('mongoose');
+const item_per_page = 2;
 
 exports.index = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const search = req.query.search;
     var nameCat =  "Thể loại";
     var catid = req.query.catid;
+
+
     if (catid)
     {
         var catID =  ObjectId(catid);
@@ -16,7 +21,9 @@ exports.index = async (req, res, next) => {
     }
     if (tmp_nameCat)
        nameCat = tmp_nameCat;
+
     const filter = {};
+
     if (catid)
     {
         if (nameCat != "Tất cả")
@@ -31,6 +38,19 @@ exports.index = async (req, res, next) => {
     
     const paginate = await bookModel.listbook(filter,page,item_per_page);
     const category =  await bookModel.listcategory();
+    //const listcatID = await bookModel.getlistcatID(category);
+
+    // const querystring = buildUrl('', {
+    //     path: 'listbook',
+    //     queryParams: {
+    //       catID: 'id',
+    //       id: listcatID
+    //     }
+    //   });
+    const prevPageQueryString = {...req.query, page:paginate.prevPage};
+    const nextPageQueryString = {...req.query, page:paginate.nextPage};
+    // const catQueryString = { }
+    
     res.render('./listbook', {
         title: "Sách",
         books: paginate.docs,
@@ -41,11 +61,14 @@ exports.index = async (req, res, next) => {
         nameSearch: search,
         hasNextPage: paginate.hasNextPage,
         nextPage: paginate.nextPage,
+        nextPageQueryString: queryString.stringify(nextPageQueryString),
         hasPreviousPage: paginate.hasPrevPage,
         prevPage: paginate.prevPage,
+        prevPageQueryString: queryString.stringify(prevPageQueryString),
         lastPage: paginate.totalPages,
         ITEM_PER_PAGE: item_per_page,
         currentPage: paginate.page,
+        //querystring: querystring
     })};
 
 

@@ -9,6 +9,15 @@ exports.listcategory = async () => {
     return cat;
 }
 
+exports.getlistcatID = async (listcategory) =>{
+    var res = [];
+    await listcategory.forEach(element => {
+        res.push(element._id);
+        console.log(element._id.toString());
+        console.log(res);
+    });
+    return res;
+}
 exports.get_name_cat = async (id) => {
     const nameCat = await categoryCollection.findOne({_id: ObjectId(id)});
     return nameCat.catogory;

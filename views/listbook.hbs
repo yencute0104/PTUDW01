@@ -10,7 +10,7 @@
                         <h3 class="wedget__title">Danh mục sản phẩm</h3>
                         <ul>
                             {{#each category}}
-                                <li><a href="?catid={{_id}}&search={{nameSearch}}">{{catogory}}</a></li>
+                                <li><a href="/listbook?catid={{_id}}">{{catogory}}</a></li>
                             {{/each}}
                         </ul>
                     </aside>
@@ -130,7 +130,7 @@
 
                     {{#if hasPreviousPage}}
                     <li>
-                        <a href="/listbook?page={{prevPage}}&catid={{catID}}&search={{nameSearch}}">
+                        <a href="/listbook?{{prePageQueryString}}">
                           {{prevPage}}
                         </a>
                     </li>
@@ -146,7 +146,7 @@
 
                     {{#if hasNextPage}}
                     <li>
-                        <a  href="/listbook?page={{nextPage}}&catid={{catID}}&search={{nameSearch}}">
+                        <a  href="/listbook?{{nextPageQueryString}}">
                           {{nextPage}}
                         </a>
                     </li>

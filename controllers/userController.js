@@ -1,6 +1,9 @@
 const userModel = require('../models/userModel');
 const fs = require('fs');
 const formidable = require('formidable');
+const cloudinary = require('cloudinary').v2;
+const fileupload = require('express-fileupload');
+
 const ISLOGIN = true;
 const ID = "5fce291f0c30b818400d4ce1";
 
@@ -34,14 +37,23 @@ exports.update_profile = async(req, res, next) => {
         }
         const coverImage = files.txtProfilePic;
         if (coverImage && coverImage.size > 0) {
-            const filename = coverImage.path.split('\\').pop() + '.' + coverImage.name.split('.').pop();
-            fs.renameSync(coverImage.path, process.env.USER_IMAGE_FOLDER + '\\' + filename);
-            fields.txtProfilePic =  '\\images\\users\\' + filename;
+            // const filename = coverImage.path.split('\\').pop() + '.' + coverImage.name.split('.').pop();
+            // fs.renameSync(coverImage.path, process.env.USER_IMAGE_FOLDER + '\\' + filename);
+            // fields.txtProfilePic =  '\\images\\users\\' + filename;
+            cloudinary.uploader.upload(coverImage.path,function(err, result){
+                fields.txtProfilePic = result.url;
+                console.log(result.url);
+                console.log(fields.txtProfilePic);
+                userModel.update_profile(fields,ID).then(()=>{
+                    res.redirect('../../');
+                    });
+            });
         }
-         // Update books from model
-        userModel.update_profile(fields,ID).then(()=>{
-        res.redirect('../../');
-        });
+        //  // Update books from model
+        // console.log(tmp);
+        // userModel.update_profile(fields,ID).then(()=>{
+        // res.redirect('../../');
+        // });
         
       });
 };

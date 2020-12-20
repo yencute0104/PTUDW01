@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+const cloudinary = require('cloudinary').v2
 var path = require('path');
 var cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser')
@@ -7,8 +8,13 @@ var logger = require('morgan');
 const Handlebars = require('handlebars');
 const hbs = require('express-handlebars');
 const helpers = require('handlebars-helpers')();
-require('dotenv').config();
 
+require('dotenv').config();
+cloudinary.config({
+  cloud_name: 'yenngan',
+  api_key: '884464388927933',
+  api_secret: 'HBBYilY1aiSYle19tC6dFJH57qI'
+})
 const { MongoClient } = require("mongodb");
 const mongoose = require('./dal/db');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
@@ -24,6 +30,7 @@ app.use(bodyParser.urlencoded({'extended':false}))
 // hbs.registerPartials(__dirname + '/views/partials');
 // hbs.registerPartial('bestseller', fs.readFileSync(__dirname + '/views/partials/bestseller.hbs', 'utf8'));
 // hbs.registerPartial('related', fs.readFileSync(__dirname + '/views/partials/related.hbs', 'utf8'));
+
 
 
 // view engine setup
