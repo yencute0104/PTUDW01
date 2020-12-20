@@ -20,6 +20,10 @@ const mongoose = require('./dal/db');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 mongoose.mongoose();
 
+const session = require("express-session");
+
+const passport = require('./passport');
+
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const booksRouter = require('./routes/home');
@@ -49,6 +53,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// passport middlewares 
+app.use(session({ secret: 'keyboard cat' }));
+app.use(passport.initialize());
+app.use(passport.session({secret: process.env.SESSION_SECRET}));
+
+//pass req.user to res.local
+app.use(function (req, res, next) {
+  res.locals.user = req.user;
+  next()
+});
 
 app.use('/', indexRouter);
 //app.use('/account', indexRouter);

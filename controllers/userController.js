@@ -42,8 +42,6 @@ exports.update_profile = async(req, res, next) => {
             // fields.txtProfilePic =  '\\images\\users\\' + filename;
             cloudinary.uploader.upload(coverImage.path,function(err, result){
                 fields.txtProfilePic = result.url;
-                console.log(result.url);
-                console.log(fields.txtProfilePic);
                 userModel.update_profile(fields,ID).then(()=>{
                     res.redirect('../../');
                     });
@@ -58,6 +56,35 @@ exports.update_profile = async(req, res, next) => {
       });
 };
 
+exports.addUser = async (req, res) => {
+    // const username = req.body.username;
+    // const email = req.body.email;
+    // const password = req.body.password;
+
+    const {username, email, password} = req.body;
+
+    const newUser = {
+        username,
+        email,
+        password
+    };
+
+    console.log (newUser);
+
+    try {
+        console.log('122222');
+        await userModel.addUser(newUser);
+        //.then(() => {
+            console.log('22222');
+            res.redirect('/users/login');
+        //}); 
+    }
+    catch (err)
+    {
+        res.render('users/register',{title: "Register", err: "Lỗi tạo tài khoản, vui lòng thử lại"});
+        return;
+    }
+};
 // exports.logout = async (req, res, next) => {
 //     // Get books from model
 //     //const books = bookModel.list();
