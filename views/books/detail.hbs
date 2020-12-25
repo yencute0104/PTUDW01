@@ -205,11 +205,18 @@
 							<h2 class="title__be--2">Sản phẩm liên quan</h2>
 						</div>
 						<div class="row mt--60">
-							<div class="productcategory__slide--2 arrows_style owl-carousel owl-theme">
+						{{#gt countRelatedBooks 2}}
+						<div class="productcategory__slide--2 arrows_style owl-carousel owl-theme">
 							{{#each relatedBook}}
 								{{>related this}}
 							{{/each}}
-					 		 </div>
+						</div>
+						{{/gt}}
+						{{#lte countRelatedBooks 2}}
+							{{#each relatedBook}}
+								{{>related this}}
+							{{/each}}
+						{{/lte}}
 						</div>
 					</div>
 					{{/isnt}}

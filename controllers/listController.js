@@ -94,7 +94,8 @@ exports.detail = async (req, res, next) => {
         title: "Chi tiết",
         category,
         book,
-        relatedBook
+        relatedBook,
+        countRelatedBooks: relatedBook.length
     });
   
 };
