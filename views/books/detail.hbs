@@ -199,7 +199,20 @@
 	                        </div>
         				</div>
 
-					{{>related}}
+					{{#isnt relatedBook false}}
+					<div class="wn__related__product pt--80 pb--50">
+						<div class="section__title text-center">
+							<h2 class="title__be--2">Sản phẩm liên quan</h2>
+						</div>
+						<div class="row mt--60">
+							<div class="productcategory__slide--2 arrows_style owl-carousel owl-theme">
+							{{#each relatedBook}}
+								{{>related this}}
+							{{/each}}
+					 		 </div>
+						</div>
+					</div>
+					{{/isnt}}
         			</div>
         			<div class="col-lg-3 col-12 md-mt-40 sm-mt-40">
         				<div class="shop__sidebar">

@@ -40,11 +40,13 @@ app.use(bodyParser.urlencoded({'extended':false}))
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+require('hbs').registerPartials(__dirname + '/views/partials');
 app.engine('hbs', hbs({ 
   extname:'hbs', 
   helpers: helpers,
   defaultView: 'default',
   layoutsDir: __dirname + '/views',
+  //partialsDir : __dirname +'/views/partials',
   handlebars: allowInsecurePrototypeAccess(Handlebars)
  }));
  

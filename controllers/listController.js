@@ -84,12 +84,17 @@ exports.index = async (req, res, next) => {
 
 exports.detail = async (req, res, next) => {
     const category =  await bookModel.listcategory();
-    const book = await bookModel.get(req.params.id);
+    const bookID = req.params.id;
+    const book = await bookModel.get(bookID);
+    const relatedBook = await bookModel.getRelatedBooks(book.catID, bookID);
+
+    console.log(relatedBook);
     res.render('./books/detail', 
     {   
         title: "Chi tiết",
         category,
-        book : book
+        book,
+        relatedBook
     });
   
 };

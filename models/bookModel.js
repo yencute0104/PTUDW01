@@ -45,6 +45,18 @@ exports.get = async (id) => {
     return book;
 }
 
+exports.getRelatedBooks = async (catID, bookID) => {
+    //const booksCollection = db().collection('Books');
+    const listRelatedBooks = await booksCollection.find({catID: ObjectId(catID), _id: {$ne:  ObjectId(bookID)}});
+    if (listRelatedBooks.length>=1)
+    {
+        return listRelatedBooks;
+    }
+        
+    else    
+        return false;
+}
+
 
 // exports.list = () => books;
 
