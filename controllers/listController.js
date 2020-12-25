@@ -7,6 +7,16 @@ const bookModel = require('../models/bookModel');
 const { Query } = require('mongoose');
 const item_per_page = 2;
 
+function showUnsignedString(search) {
+    var signedChars = "àảãáạăằẳẵắặâầẩẫấậđèẻẽéẹêềểễếệìỉĩíịòỏõóọôồổỗốộơờởỡớợùủũúụưừửữứựỳỷỹýỵÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬĐÈẺẼÉẸÊỀỂỄẾỆÌỈĨÍỊÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢÙỦŨÚỤƯỪỬỮỨỰỲỶỸÝỴ";
+    var unsignedChars = "aaaaaaaaaaaaaaaaadeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyAAAAAAAAAAAAAAAAADEEEEEEEEEEEIIIIIOOOOOOOOOOOOOOOOOUUUUUUUUUUUYYYYY";
+    var input = search;
+    var pattern = new RegExp("[" + signedChars + "]", "g");
+    var output = input.replace(pattern, function(m, key, value) {
+        return unsignedChars.charAt(signedChars.indexOf(m));
+    });
+    return output;
+}
 exports.index = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const search = req.query.search;
@@ -31,7 +41,7 @@ exports.index = async (req, res, next) => {
     }
     if (search)
     {
-        filter.title = new RegExp(search, 'i');
+        filter.unsigned_title= new RegExp(showUnsignedString(search), 'i');
     }
 
     filter.isDeleted =  false;
@@ -51,7 +61,7 @@ exports.index = async (req, res, next) => {
     const nextPageQueryString = {...req.query, page:paginate.nextPage};
     // const catQueryString = { }
     
-    res.render('./listbook', {
+    res.render('./books/listbook', {
         title: "Sách",
         books: paginate.docs,
         totalBooks: paginate.totalDocs,
@@ -75,7 +85,7 @@ exports.index = async (req, res, next) => {
 exports.detail = async (req, res, next) => {
     const category =  await bookModel.listcategory();
     const book = await bookModel.get(req.params.id);
-    res.render('./detail', 
+    res.render('./books/detail', 
     {   
         title: "Chi tiết",
         category,

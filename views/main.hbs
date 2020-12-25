@@ -38,7 +38,7 @@
 		<header id="wn__header" class="header__area header__absolute sticky__header">
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-md-6 col-sm-6 col-6 col-lg-2">
+					<div class="col-md-6 col-sm-6 col-6 col-lg-1">
 						<div class="logo">
 							<a href="/">
 								<img src="/images/logo/logo.png" alt="logo images">
@@ -86,9 +86,9 @@
 							</ul>
 						</nav>
 					</div>
-					<div class="col-md-6 col-sm-6 col-6 col-lg-2">
+					<div class="col-md-6 col-sm-6 col-6 col-lg-3">
 						<ul class="header__sidebar__right d-flex justify-content-end align-items-center">
-							<li class="shop_search"><a class="search__active" href="#"></a></li>
+							<li class="shop_search"><a class="search__active" ></a></li>
 							<li class="wishlist"><a href="#"></a></li>
 							<li class="shopcart"><a class="cartbox_active" href="#"><span class="product_qun">3</span></a>
 								<!-- Start Shopping Cart -->
@@ -167,22 +167,22 @@
 								<!-- End Shopping Cart -->
 							</li>
 							{{#if user}}
-							<li class="setting__bar__icon"><a class="setting__active" href="/account"></a>
+							<li class="setting__bar__icon"><a class="setting__active" title="Tài khoản của tôi"></a>
 								<div class="searchbar__content setting__block">
 									<div class="content-inner">
 										<div class="switcher-currency">
 											
 											<strong class="label switcher-label">
-												<span>Tài khoản của tôi</span>
+												<span>{{user.username}}</span>
 											</strong>
 											<div class="switcher-options">
 												<div class="switcher-currency-trigger">
 													<div class="setting__menu">
 													
-														<span><a href="/account/profile">Chỉnh sửa thông tin cá nhân</a></span>
-														<span><a href="/account/login">Đăng nhập</a></span>
-														<span><a href="/account/signin">Đăng ký</a></span>
-														<span><a href="/account/logout">Đăng xuất</a></span>
+														<span><a href="/users/profile/{{user._id}}">Chỉnh sửa thông tin cá nhân</a></span>
+														<span><a href="/users/login">Đăng nhập tài khoản khác</a></span>
+														<span><a href="/users/register">Đăng ký</a></span>
+														<span><a href="/users/logout">Đăng xuất</a></span>
 													</div>
 												</div>
 											</div>
@@ -191,6 +191,15 @@
 								</div>
 							</li>
 							{{/if}}
+							{{#not user }}
+								<li>
+									<a href="/users/login"><span class="color--theme">Đăng nhập</span></a>
+								</li>
+								&nbsp; &nbsp; &nbsp;
+								<li>
+									<a href="/users/register"><span class="color--theme">Đăng ký</span></a>
+								</li>
+							{{/not}}
 						</ul>
 					</div>
 				</div>
@@ -213,6 +222,7 @@
 									</ul>
 								</li>
 								<li><a href="contact.html">Contact</a></li>
+								
 							</ul>
 						</nav>
 					</div>
@@ -389,6 +399,22 @@
 	<script src="/js/bootstrap.min.js"></script>
 	<script src="/js/plugins.js"></script>
 	<script src="/js/active.js"></script>
+	<script>
+		function readURL(input) {
+					if (input.files && input.files[0]) {
+						var reader = new FileReader();
+
+						reader.onload = function (e) {
+							$('#image')
+								.attr('src', e.target.result)
+								.width(200)
+								.height(200);
+						};
+
+						reader.readAsDataURL(input.files[0]);
+					}
+				}
+     </script>
 	
 </body>
 </html>

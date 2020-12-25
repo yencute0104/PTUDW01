@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 const userCollection = require('./MongooseModel/userMongooseModel');
 
-exports.menu = async (id) => {
+exports.menu = async(id) => {
     //console.log('model db');
     //const booksCollection = db().collection('Books');
     const user = await userCollection.findOne({_id: ObjectId(id)});
@@ -69,4 +69,11 @@ exports.checkCredential = async(username, password) => {
 
 exports.getUser = (id) => {
     return userCollection.findOne({_id: id});
+}
+
+exports.getNameUser = (username)=>{
+    const kt = userCollection.findOne({username: username});
+    if (!kt)
+        return false;
+    return kt;
 }

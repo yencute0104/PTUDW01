@@ -4,8 +4,8 @@ const formidable = require('formidable');
 const cloudinary = require('cloudinary').v2;
 const fileupload = require('express-fileupload');
 
-const ISLOGIN = true;
-const ID = "5fce291f0c30b818400d4ce1";
+//const ISLOGIN = true;
+//const ID = "5fce291f0c30b818400d4ce1";
 
 exports.index = async(req, res, next) => {
     // Get books from model
@@ -19,12 +19,12 @@ exports.index = async(req, res, next) => {
 };
 
 exports.profile = async(req, res, next) => {
-    // Get books from model
-    //const books = bookModel.list();
-    // Pass data to view to display list of books
-    var user;
-    if (ISLOGIN)
-        res.render('users/profile',await userModel.menu(ID));
+  
+    //const user = await userModel.menu(req.params.id);
+    if (req.isAuthenticated())
+        res.render('users/profile',{title: 'Profile'});
+    else 
+        res.redirect('../login');
 };
 
 exports.update_profile = async(req, res, next) => {
@@ -42,7 +42,7 @@ exports.update_profile = async(req, res, next) => {
             // fields.txtProfilePic =  '\\images\\users\\' + filename;
             cloudinary.uploader.upload(coverImage.path,function(err, result){
                 fields.txtProfilePic = result.url;
-                userModel.update_profile(fields,ID).then(()=>{
+                userModel.update_profile(fields,req.params.id).then(()=>{
                     res.redirect('../../');
                     });
             });
@@ -73,15 +73,18 @@ exports.addUser = async (req, res) => {
 
     try {
         console.log('122222');
-        await userModel.addUser(newUser);
-        //.then(() => {
+        const check = await userModel.getNameUser(username);
+        if (!check)
+        {
+            await userModel.addUser(newUser);
             console.log('22222');
             res.redirect('/users/login');
-        //}); 
+        }
+        else throw("Lỗi không thể tạo tài khoản do tên đăng nhập hoặc email đã tồn tại");
     }
     catch (err)
     {
-        res.render('users/register',{title: "Register", err: "Lỗi tạo tài khoản, vui lòng thử lại"});
+        res.render('users/register',{title: "Register", err: err});
         return;
     }
 };

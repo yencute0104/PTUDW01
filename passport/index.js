@@ -8,7 +8,7 @@ passport.use(new LocalStrategy(
     const user = await userModel.checkCredential(username, password);
     
     if (!user)
-        return done(null, false, { message: 'Tên đăng nhập hoặc mật khẩu không đúng' });
+        return done(null, false, {message: 'Tên đăng nhập hoặc mật khẩu không đúng'});
     return done(null, user);
     }
 ));

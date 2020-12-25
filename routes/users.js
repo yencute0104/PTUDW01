@@ -8,20 +8,23 @@ const userController = require('../controllers/userController');
 router.get('/', userController.index);
 
 router.get('/login', function(req, res, next){
-  res.render('users/login');
+  res.render('users/login',{title: 'Đăng nhập'});
 })
 
 router.post('/login',  passport.authenticate('local', { successRedirect: '/',
-failureRedirect: '/login?error-wrong',
+failureRedirect: '/users/login',
 failureFlash: false}))
 
 router.get('/register', function(req, res, next){
-  res.render('users/register');
+  res.render('users/register',{title: 'Đăng ký'});
 })
 router.post('/register', userController.addUser);
 
-router.get('/profile', userController.profile);
-router.post('/profile', userController.update_profile);
+router.get('/profile/:id', userController.profile);
+router.post('/profile/:id', userController.update_profile);
 
-
+router.get('/logout', function(req,res,next){
+  req.logout();
+  res.redirect('/');
+})
 module.exports = router;

@@ -27,7 +27,7 @@ const passport = require('./passport');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const booksRouter = require('./routes/home');
-const listRouter = require('./routes/listbook');
+const listbookRouter = require('./routes/listbook');
 
 const app = express();
 app.use(bodyParser.urlencoded({'extended':false}))
@@ -69,7 +69,7 @@ app.use('/', indexRouter);
 //app.use('/account', indexRouter);
 app.use('/users', usersRouter);
 app.use('/home', indexRouter);
-app.use('/listbook',listRouter);
+app.use('/listbook',listbookRouter);
 
 
 // catch 404 and forward to error handler

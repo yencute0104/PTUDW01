@@ -1,18 +1,18 @@
 	<section class="my_account_area pt--80 pb--55 bg--white">
-			<div class="container">
-				<div class="row align-items-center">
-					<div class="col">
+			<div class="container  center_login_register">
+				<div class="row ">
+					<div class="col-6 text-center ">
 						<div class="my__account__wrapper">
 							<h3 class="account__title">Login</h3>
-							<form action="/users/login" method="post">
+							<form action="/users/login" method="post"> 
 								<div class="account__form">
 									<div class="input__box">
 										<label>Username <span>*</span></label>
-										<input type="text" name="username">
+										<input type="text" name="username" required>
 									</div>
 									<div class="input__box">
 										<label>Password<span>*</span></label>
-										<input type="password" name="password">
+										<input type="password" name="password" required>
 									</div>
 									<div class="form__btn">
 										<button type="submit">Login</button>
@@ -21,6 +21,8 @@
 											<span>Remember me</span>
 										</label>
 									</div>
+									<br>
+										<p id="error">{{err}}</p>
 									<a class="forget_pass" href="#">Lost your password?</a>
 								</div>
 							</form>
