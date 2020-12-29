@@ -88,7 +88,7 @@ exports.detail = async (req, res, next) => {
     const book = await bookModel.get(bookID);
     const relatedBook = await bookModel.getRelatedBooks(book.catID, bookID);
 
-    console.log(relatedBook);
+    //console.log(relatedBook);
     res.render('./books/detail', 
     {   
         title: "Chi tiết",

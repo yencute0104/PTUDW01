@@ -16,15 +16,6 @@
         						<div class="col-lg-6 col-12">
         							<div class="product__info__main">
         								<h1>{{book.title}}</h1>
-        								<div class="product-reviews-summary d-flex">
-        									<ul class="rating-summary d-flex">
-    											<li><i class="zmdi zmdi-star-outline"></i></li>
-    											<li><i class="zmdi zmdi-star-outline"></i></li>
-    											<li><i class="zmdi zmdi-star-outline"></i></li>
-    											<li class="off"><i class="zmdi zmdi-star-outline"></i></li>
-    											<li class="off"><i class="zmdi zmdi-star-outline"></i></li>
-        									</ul>
-        								</div>
                                        
         								<div class="price-box">
         									<span>{{book.basePrice}}</span>
@@ -33,57 +24,25 @@
         									<p>{{book.descript}}</p>
         									
         								</div>
+										<form method="post">
         								<div class="box-tocart d-flex">
-        									<span>Qty</span>
-        									<input id="qty" class="input-text qty" name="qty" min="1" value="1" title="Qty" type="number">
-        									<div class="addtocart__actions">
-        										<button class="tocart" type="submit" title="Add to Cart">Thêm vào giỏ hàng </button>
+        									<span>Số lượng: </span>
+        									<input id="qty" class="input-text qty" name="qty" min="1" value="1"  title="Qty" type="number">
+										</div>
+										<div class="box-tocart d-flex">
+											<div class="addtocart__actions">
+        										<button class="tocart" type="submit" title="Add to Cart" >Thêm vào giỏ hàng </button>
         									</div>
-											<div class="product-addto-links clearfix">
-												<a class="wishlist" href="#"></a>
-												<a class="compare" href="#"></a>
-											</div>
-        								</div>
-										<div class="product_meta">
-											<span class="posted_in">Categories: 
-												<a href="#">Adventure</a>, 
-												<a href="#">Kids' Music</a>
-											</span>
 										</div>
-										<div class="product-share">
-											<ul>
-												<li class="categories-title">Share :</li>
-												<li>
-													<a href="#">
-														<i class="icon-social-twitter icons"></i>
-													</a>
-												</li>
-												<li>
-													<a href="#">
-														<i class="icon-social-tumblr icons"></i>
-													</a>
-												</li>
-												<li>
-													<a href="#">
-														<i class="icon-social-facebook icons"></i>
-													</a>
-												</li>
-												<li>
-													<a href="#">
-														<i class="icon-social-linkedin icons"></i>
-													</a>
-												</li>
-											</ul>
-										</div>
-									
+										</form>
         							</div>
         						</div>
         					</div>
         				</div>
         				<div class="product__info__detailed">
 							<div class="pro_details_nav nav justify-content-start" role="tablist">
-	                            <a class="nav-item nav-link active" data-toggle="tab" href="#nav-details" role="tab">Details</a>
-	                            <a class="nav-item nav-link" data-toggle="tab" href="#nav-review" role="tab">Reviews</a>
+	                            <a class="nav-item nav-link active" data-toggle="tab" href="#nav-details" role="tab">Nội dung</a>
+	                            <a class="nav-item nav-link" data-toggle="tab" href="#nav-review" role="tab">Đánh giá</a>
 	                        </div>
 	                        <div class="tab__container">
 	                        	<!-- Start Single Tab Content -->

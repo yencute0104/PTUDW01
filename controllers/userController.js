@@ -7,6 +7,8 @@ const fileupload = require('express-fileupload');
 //const ISLOGIN = true;
 //const ID = "5fce291f0c30b818400d4ce1";
 
+
+
 exports.index = async(req, res, next) => {
     // Get books from model
     //const books = bookModel.list();
@@ -25,6 +27,7 @@ exports.profile = async(req, res, next) => {
         res.render('users/profile',{title: 'Profile'});
     else 
         res.redirect('../login');
+  
 };
 
 exports.update_profile = async(req, res, next) => {
@@ -72,19 +75,31 @@ exports.addUser = async (req, res) => {
     console.log (newUser);
 
     try {
-        console.log('122222');
+        req.checkBody('password','Mật khẩu phải có ít nhất 8 kí tự').isLength({min:8});
+        const err = req.validationErrors();
+        if (err)
+        {
+            throw("Mật khẩu phải có ít nhất 8 kí tự");
+            return;
+        }
+            
         const check = await userModel.getNameUser(username);
         if (!check)
         {
             await userModel.addUser(newUser);
-            console.log('22222');
             res.redirect('/users/login');
         }
-        else throw("Lỗi không thể tạo tài khoản do tên đăng nhập hoặc email đã tồn tại");
+        else 
+        {
+            throw("Lỗi không thể tạo tài khoản do tên đăng nhập hoặc email đã tồn tại");
+            return;
+        }
+        
     }
     catch (err)
     {
-        res.render('users/register',{title: "Register", err: err});
+        const message = err;
+        res.render('users/register',{title: "Register", message, hasErr: message.length >0, username, email, password });
         return;
     }
 };

@@ -13,6 +13,7 @@ const user = new Schema(
     lastName: String,
     address: String,
     profilePic: String,
+    cart: Object
 },
   {collection: 'Users'}
   );

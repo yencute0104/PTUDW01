@@ -22,8 +22,33 @@
 
 // module.exports.db = db;
 
-const mongoose = require('mongoose');
-const uri = process.env.URI || "mongodb+srv://nganyen:123@cluster0.qwbft.mongodb.net/PTUDW_BookStore";
+// const mongoose = require('mongoose');
+// const uri = process.env.URI || "mongodb+srv://nganyen:123@cluster0.qwbft.mongodb.net/PTUDW_BookStore";
+
+// let database;
+
+// async function connectDB() {
+//     try {
+//         await mongoose.connect( uri, {
+//             useNewUrlParser: true, 
+//             useUnifiedTopology: true,
+//             useFindAndModify: false,
+//             useCreateIndex: true});
+
+//         console.log("DB is connected");    
+//         }
+//     catch (error) 
+//         { 
+//             console.error("Can't connect to DB");    
+//         }
+// }
+
+// connectDB();
+
+// const db = () => database;
+
+// module.exports.mongoose = db;
+
 exports.mongoose = async () => {
     try {
         await mongoose.connect( uri, {
