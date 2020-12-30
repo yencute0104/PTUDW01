@@ -77,3 +77,12 @@ exports.getNameUser = (username)=>{
         return false;
     return kt;
 }
+
+
+exports.createCart = async (id, cart) => {
+
+    await userCollection.updateOne(   
+        {_id: ObjectId(id)},
+        {cart: cart}
+    )
+}

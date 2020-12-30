@@ -66,10 +66,18 @@
 							<li class="shop_search"><a class="search__active" ></a></li>
 							<li>&nbsp; &nbsp;&nbsp;&nbsp;</li>
 							<li class="shopcart"><a  href="/carts/listcart">
-							{{#if session.cart}}
-							<span class="product_qun">{{session.cart.totalQty}}</span>
+							{{#if user}}
+								{{#if user.cart}}
+									<span class="product_qun">{{user.cart.totalQty}}</span>
+								{{else}}
+									<span class="product_qun">0</span>
+								{{/if}}
 							{{else}}
-							<span class="product_qun">0</span>
+								{{#if session.cart}}
+									<span class="product_qun">{{session.cart.totalQty}}</span>
+								{{else}}
+									<span class="product_qun">0</span>
+								{{/if}}
 							{{/if}}
 							</a>
 							</li>
