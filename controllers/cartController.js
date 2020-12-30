@@ -71,6 +71,17 @@ exports.deleteItem = async (req, res, next) => {
         userModel.createCart(user._id, cart);
     else
         req.session.cart = cart;
-        
+
     res.redirect('../../listcart');
 };
+
+exports.checkout =async (req,res,next) =>{
+    const cart = new cartModel(req.user.cart);
+    res.render('checkout',{
+        title: 'Mua hàng', 
+        books: cart.generateArray(), 
+        totalPrice: cart.totalPrice,
+        totalOrder: cart.totalPrice + parseInt(30000)
+    })
+};
+

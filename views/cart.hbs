@@ -24,9 +24,9 @@
                                         <tr>
                                             <td class="product-thumbnail"><a href="/listbook/{{this.item._id}}"><img src={{this.item.cover}} alt="product img"></a></td>
                                             <td class="product-name"><a href="/listbook/{{this.item._id}}">{{this.item.title}}</a></td>
-                                            <td class="product-price"><span id="price" class="amount" >{{this.item.basePrice}}</span></td>
+                                            <td class="product-price"><span id="price" class="amount" >{{this.item.basePrice}} vnđ</span></td>
                                             <td class="product-price" ><span class="amount" name="qty">{{this.qty}}</span></td>
-                                            <td class="product-subtotal" id="totalPriceOneItem">{{this.price}}</td>
+                                            <td class="product-subtotal" id="totalPriceOneItem">{{this.price}} vnđ</td>
                                             <td class="product-remove"><a href="/carts/listcart/remove/{{this.item._id}}">X</a></td>
                                         </tr>
                                         {{/each}}
@@ -41,21 +41,21 @@
                         <div class="cartbox__total__area">
                             <div class="cartbox-total d-flex justify-content-between">
                                 <ul class="cart__total__list">
-                                    <li>Cart total</li>
+                                    <li>Tổng tiền</li>
                                 </ul>
                                 <ul class="cart__total__tk">
-                                    <li id="totalPrice">{{totalPrice}}</li>
+                                    <li id="totalPrice">{{totalPrice}} vnđ</li>
                                 </ul>
-                                 <button class="btn">
-                                    <a href="/carts/checkout">Mua hàng</a>
-                                </button>
-                              
+                                <ul>
+                                    <li><a class="cart__total__amount  btn btn-success" href="/carts/checkout">Mua hàng</a></li>
+                                </ul>
                             </div>
                         </div>
                         
                                
                     </div>
                 </div>
+                
                 {{else}}
                 <section class="my_account_area pt--80 pb--55 bg--white">
 			        <div class="container  center_login_register">
