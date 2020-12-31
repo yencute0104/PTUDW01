@@ -82,7 +82,11 @@
 							</a>
 							</li>
 							{{#if user}}
-							<li class="setting__bar__icon"><a class="setting__active" title="Tài khoản của tôi"><img src="{{user.profilePic}}" width="30" height="30"></a>
+							<li class="setting__bar__icon"><a class="setting__active" title="Tài khoản của tôi">
+								{{#if hasProfilePic }}
+									<img src="{{user.profilePic}}" width="30" height="30">
+								{{/if}}
+							</a>
 								<div class="searchbar__content setting__block">
 									<div class="content-inner">
 										<div class="switcher-currency">
@@ -94,8 +98,8 @@
 												<div class="switcher-currency-trigger">
 													<div class="setting__menu">
 													
-														<span><a href="/users/profile/{{user._id}}">Chỉnh sửa thông tin cá nhân</a></span>
-														<span><a href="/users/login">Đơn hàng của tôi</a></span>
+														<span><a href="/users/profile/{{user._id}}">Tài khoản của tôi</a></span>
+														<span><a href="/users/order">Đơn hàng của tôi</a></span>
 														<span><a href="/users/login">Đăng nhập tài khoản khác</a></span>
 														<span><a href="/users/register">Đăng ký</a></span>
 														<span><a href="/users/logout">Đăng xuất</a></span>
@@ -106,7 +110,8 @@
 									</div>
 								</div>
 							</li>
-							{{else }}
+							{{/if}}
+							{{#not user }}
 								<li>
 									<a href="/users/login"><span class="color--theme">Đăng nhập</span></a>
 								</li>
@@ -114,7 +119,7 @@
 								<li>
 									<a href="/users/register"><span class="color--theme">Đăng ký</span></a>
 								</li>
-							{{/if}}
+							{{/not}}
 						</ul>
 					</div>
 				</div>

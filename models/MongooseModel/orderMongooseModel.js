@@ -5,6 +5,9 @@ const {Schema} = mongoose;
 const order = new Schema(
 {
     userID: ObjectId,
+    firstName: String,
+    lastName:  String,
+    phone: String,
     district: String,
     ward: String,
     city: String,

@@ -4,6 +4,9 @@ const orderCollection = require('./MongooseModel/orderMongooseModel');
 exports.createOrder = async (newOrder) => {
     await orderCollection.create({
         userID: ObjectId(newOrder.id),
+        firstName: newOrder.firstName,
+        lastName: newOrder.lastName,
+        phone: newOrder.phone,
         city: newOrder.city,
         district: newOrder.district,
         ward: newOrder.ward,
@@ -12,4 +15,14 @@ exports.createOrder = async (newOrder) => {
         totalOrder: newOrder.totalOrder,
         status: "Đợi duyệt"
     });
-}
+};
+
+exports.getOrder = async (id) =>{
+    const order = await orderCollection.findOne({_id: ObjectId(id)});
+    return order;
+};
+
+exports.getListOrderWithStatus = async (id, status) =>{
+    const listOrder = await orderCollection.find({userID: ObjectId(id), status: status});
+    return listOrder;
+};

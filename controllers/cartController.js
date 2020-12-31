@@ -5,6 +5,11 @@ const bookModel = require('../models/bookModel');
 const cartModel = require('../models/cartModel');
 const userModel = require('../models/userModel');
 
+// hiển thị danh sách đơn hàng của người dùng
+exports.index =  (req, res, next) =>{
+    res.render('order',{title: 'Đơn hàng'});
+};
+
 exports.add_to_cart = async (req, res, next) => {
     const bookID = req.params.id;
     const qty = parseInt(req.body.qty);
@@ -76,12 +81,18 @@ exports.deleteItem = async (req, res, next) => {
 };
 
 exports.checkout =async (req,res,next) =>{
-    const cart = new cartModel(req.user.cart);
-    res.render('checkout',{
+    if (req.user.cart)
+    {
+        const cart = new cartModel(req.user.cart);
+        res.render('checkout',{
         title: 'Mua hàng', 
         books: cart.generateArray(), 
         totalPrice: cart.totalPrice,
         totalOrder: cart.totalPrice + parseInt(30000)
-    })
+        })
+    }
+    else    
+        res.render('cart',{title: 'Giỏ hàng'});
+    
 };
 
