@@ -1,5 +1,5 @@
 const { ObjectId} = require('mongodb');
-const commentCollection = require('./MongooseModel/commentMongooseModel');
+//const commentCollection = require('./MongooseModel/commentMongooseModel');
 const userModel = require('../models/userModel');
 module.exports = function Comment(oldComment){
     

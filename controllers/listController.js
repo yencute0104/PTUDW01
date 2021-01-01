@@ -107,7 +107,8 @@ exports.detail = async (req, res, next) => {
         bookCat,
         relatedBook,
         countRelatedBooks: relatedBook.length,
-        comment
+        comment,
+        show_active_1: "show active"
     });
   
 };

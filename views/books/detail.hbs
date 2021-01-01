@@ -49,7 +49,7 @@
 	                        </div>
 	                        <div class="tab__container">
 	                        	<!-- Start Single Tab Content -->
-	                        	<div class="pro__tab_label tab-pane fade show active" id="nav-details" role="tabpanel">
+	                        	<div class="pro__tab_label tab-pane fade {{show_active_1}}" id="nav-details" role="tabpanel">
 									<div class="description__attribute">
 										{{book.detail}}
 									</div>
@@ -57,8 +57,8 @@
 	                        	<!-- End Single Tab Content -->
 	                        	<!-- Start Single Tab Content -->
 								
-	                        	<div class="pro__tab_label tab-pane fade" id="nav-review" role="tabpanel">
-									<form action="submit_comment/{{book._id}}" method="POST">
+	                        	<div class="pro__tab_label tab-pane fade {{show_active_2}}" id="nav-review" role="tabpanel">
+									<form action="/listbook/submit_comment/{{book._id}}" method="POST">
 									<div class="review__attribute">
 										{{#if comment}}										
 												<div class="col-md-7">											
@@ -95,11 +95,17 @@
 													{{!-- <span>Tên của bạn</span><input id="nickname_field" type="text" name="nickname"> --}}
 												{{else}}
 													<span>Tên của bạn</span><input id="nickname_field" type="text" name="nickname">
+													{{#if err}}
+													<br>
+														<div class="alert alert-danger">
+															{{err}}
+														</div>
+													{{/if}}
 												{{/if}}
 											</div>
 											<div class="input__box">
 												<span>Bình luận</span>
-												<textarea name="content"></textarea>
+												<textarea name="content" value="{{content}}"></textarea>
 											</div>
 											<div class="review-form-actions">
 												<button class="btn border button" type="submit" >Gửi bình luận</button>
