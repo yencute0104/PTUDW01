@@ -4,6 +4,8 @@ const queryString = require('query-string');
 const buildUrl = require('build-url');
 
 const bookModel = require('../models/bookModel');
+const commentModel = require('../models/commentModel');
+const userModel = require('../models/userModel');
 const { Query } = require('mongoose');
 const item_per_page = 2;
 
@@ -86,16 +88,26 @@ exports.detail = async (req, res, next) => {
     const category =  await bookModel.listcategory();
     const bookID = req.params.id;
     const book = await bookModel.get(bookID);
+    const bookCat = await bookModel.get_name_cat(book.catID);
     const relatedBook = await bookModel.getRelatedBooks(book.catID, bookID);
-
-    //console.log(relatedBook);
+    const comment = book.comment ? book.comment:[];
+    var avatar;
+    for (id in comment)
+    {
+        avatar = await userModel.getProfilePicUser(comment[id].nickname);
+        if (avatar)
+            comment[id].avatar = avatar;
+    }
+    
     res.render('./books/detail', 
     {   
         title: "Chi tiết",
         category,
         book,
+        bookCat,
         relatedBook,
-        countRelatedBooks: relatedBook.length
+        countRelatedBooks: relatedBook.length,
+        comment
     });
   
 };

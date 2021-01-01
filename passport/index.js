@@ -18,10 +18,8 @@ passport.use(new LocalStrategy(
         const cart = new cartModel(req.session.cart);
         await userModel.createCart(user._id, cart);
     }
-    var hasProfilePic = false;
     
-    if (user.profilePic != "")
-        hasProfilePic = true;
+    console.log(user.username);
       
     return done(null, user);
     }
@@ -32,8 +30,8 @@ passport.serializeUser(function(user, done) {
 });
   
 passport.deserializeUser(function(id, done) {
-    userModel.getUser(id).then((user,err)=>{
-        done(err, user);
+    userModel.getUser(id).then((user)=>{
+        done(null, user);
     })
    
 });

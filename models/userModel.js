@@ -78,7 +78,13 @@ exports.getNameUser = (username)=>{
     return kt;
 }
 
-
+exports.getProfilePicUser = async(username)=>{
+    const user = await userCollection.findOne({username: username});
+    if (user)
+        return user.profilePic;
+    else 
+        return null;
+}
 exports.createCart = async (id, cart) => {
 
     await userCollection.updateOne(   

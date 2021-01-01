@@ -57,6 +57,13 @@ exports.getRelatedBooks = async (catID, bookID) => {
         return false;
 }
 
+exports.add_comment = async (id, cmt) => {
+
+    await booksCollection.updateOne(   
+        {_id: ObjectId(id)},
+        {comment: cmt}
+    )
+}
 
 // exports.list = () => books;
 

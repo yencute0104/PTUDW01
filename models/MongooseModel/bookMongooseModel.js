@@ -16,7 +16,8 @@ const book = new Schema(
     status: String,
     catogory: String,
     catID: ObjectId,
-    isDeleted: Boolean
+    isDeleted: Boolean,
+    comment: Array
 },
   {collection: 'Books'}
   );
