@@ -18,8 +18,12 @@ passport.use(new LocalStrategy(
         const cart = new cartModel(req.session.cart);
         await userModel.createCart(user._id, cart);
     }
-    const hasProfilePic = user.profilePic != "";
-    return done(null, user, {hasProfilePic: hasProfilePic});
+    var hasProfilePic = false;
+    
+    if (user.profilePic != "")
+        hasProfilePic = true;
+      
+    return done(null, user);
     }
 ));
 

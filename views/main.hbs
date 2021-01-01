@@ -15,7 +15,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet"> 
 	<link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,600,600i,700,700i,800" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet"> 
-
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
 	<!-- Stylesheets -->
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/css/plugins.css">
@@ -83,7 +83,7 @@
 							</li>
 							{{#if user}}
 							<li class="setting__bar__icon"><a class="setting__active" title="Tài khoản của tôi">
-								{{#if hasProfilePic }}
+								{{#if user.profilePic }}
 									<img src="{{user.profilePic}}" width="30" height="30">
 								{{/if}}
 							</a>
@@ -100,7 +100,7 @@
 													
 														<span><a href="/users/profile/{{user._id}}">Tài khoản của tôi</a></span>
 														<span><a href="/users/order">Đơn hàng của tôi</a></span>
-														<span><a href="/users/login">Đăng nhập tài khoản khác</a></span>
+														<span><a href="/users/switch_login">Đăng nhập tài khoản khác</a></span>
 														<span><a href="/users/register">Đăng ký</a></span>
 														<span><a href="/users/logout">Đăng xuất</a></span>
 													</div>

@@ -16,6 +16,11 @@ router.get('/', function(req, res, next){
   res.render('error',{title: 'Error', message, hasErr: message.length > 0});
 });
 
+router.get('/switch_login', function(req, res, next){
+  req.logout();
+  res.redirect('login');
+});
+
 router.get('/login', function(req, res, next){
   const message = req.flash('error');
   res.render('users/login',{title: 'Đăng nhập', message, hasErr: message.length > 0});
