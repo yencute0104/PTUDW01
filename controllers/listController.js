@@ -95,6 +95,7 @@ exports.detail = async (req, res, next) => {
     const bookCat = await bookModel.get_name_cat(book.catID);
     const relatedBook = await bookModel.getRelatedBooks(book.catID, bookID);
     const comment = book.comment ? book.comment:[];
+    const listCover = book.listCover;
     var avatar;
     for (id in comment)
     {
@@ -108,6 +109,7 @@ exports.detail = async (req, res, next) => {
         title: "Chi tiết",
         category,
         book,
+        listCover,
         bookCat,
         relatedBook,
         countRelatedBooks: relatedBook.length,

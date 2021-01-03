@@ -8,6 +8,7 @@ const book = new Schema(
     title: String,
     unsigned_title: String,
     cover: String,
+    listCover: Array,
     oldPrice: String,
     basePrice: Number,
     detail: String,
