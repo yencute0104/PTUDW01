@@ -13,6 +13,11 @@ passport.use(new LocalStrategy(
     if (!user)
         return done(null, false, {message: 'Tên đăng nhập hoặc mật khẩu không đúng'});
 
+    const isBlocked = await userModel.checkIsBlocked(username);
+
+    if (isBlocked)
+        return done(null, false, {message: 'Tài khoản hiện đã bị khóa'});
+
     if (req.session.cart)
     {
         const cart = new cartModel(req.session.cart);

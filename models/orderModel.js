@@ -4,6 +4,7 @@ const orderCollection = require('./MongooseModel/orderMongooseModel');
 exports.createOrder = async (newOrder) => {
     await orderCollection.create({
         userID: ObjectId(newOrder.id),
+        username: newOrder.username,
         firstName: newOrder.firstName,
         lastName: newOrder.lastName,
         phone: newOrder.phone,

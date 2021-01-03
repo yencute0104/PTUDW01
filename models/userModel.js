@@ -33,13 +33,13 @@ exports.update_profile = async (req,id) => {
 
 exports.addUser = async (newUser) => {
     const saltRounds = 10;
-    console.log("hello");
     bcrypt.genSalt(saltRounds, function(err, salt) {
         bcrypt.hash(newUser.password, salt, function(err, hash) {
             let user = new userCollection({
                 username: newUser.username,
                 email: newUser.email,
-                password: hash
+                password: hash, 
+                status: "Normal"
             });
             user
             .save()
@@ -64,6 +64,13 @@ exports.checkCredential = async(username, password) => {
     let checkPassword = await bcrypt.compare(password, user.password); 
     if (checkPassword)
         return user;
+    return false;
+};
+
+exports.checkIsBlocked = async(username) => {
+    const user = await userCollection.findOne({username: username});
+    if (user.status === "Blocked")
+        return true;
     return false;
 }  
 
