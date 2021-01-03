@@ -9,7 +9,7 @@ const book = new Schema(
     unsigned_title: String,
     cover: String,
     oldPrice: String,
-    basePrice: String,
+    basePrice: Number,
     detail: String,
     descript: String,
     author: String,

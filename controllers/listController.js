@@ -7,7 +7,7 @@ const bookModel = require('../models/bookModel');
 const commentModel = require('../models/commentModel');
 const userModel = require('../models/userModel');
 const { Query } = require('mongoose');
-const item_per_page = 2;
+const item_per_page = 5;
 
 function showUnsignedString(search) {
     var signedChars = "àảãáạăằẳẵắặâầẩẫấậđèẻẽéẹêềểễếệìỉĩíịòỏõóọôồổỗốộơờởỡớợùủũúụưừửữứựỳỷỹýỵÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬĐÈẺẼÉẸÊỀỂỄẾỆÌỈĨÍỊÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢÙỦŨÚỤƯỪỬỮỨỰỲỶỸÝỴ";
@@ -22,9 +22,12 @@ function showUnsignedString(search) {
 exports.index = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const search = req.query.search;
+    const sort= parseInt(req.query.sort) || 2;
+
+    const nameSortArr = ["Giá tăng dần", "Giá giảm dần", "Từ A->Z", "Từ Z->A"];
+
     var nameCat =  "Thể loại";
     var catid = req.query.catid;
-
 
     if (catid)
     {
@@ -48,7 +51,7 @@ exports.index = async (req, res, next) => {
 
     filter.isDeleted =  false;
     
-    const paginate = await bookModel.listbook(filter,page,item_per_page);
+    const paginate = await bookModel.listbook(filter,page,item_per_page, sort);
     const category =  await bookModel.listcategory();
     //const listcatID = await bookModel.getlistcatID(category);
 
@@ -70,6 +73,7 @@ exports.index = async (req, res, next) => {
         category,
         nameCat,
         catID,
+        nameSort: nameSortArr[sort],
         nameSearch: search,
         hasNextPage: paginate.hasNextPage,
         nextPage: paginate.nextPage,

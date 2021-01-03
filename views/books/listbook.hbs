@@ -62,14 +62,17 @@
                             <p>Số lượng: {{totalBooks}} sản phẩm </p>
                             <div class="orderby__wrapper">
                                 <span>Sắp xếp</span>
-                                <select class="shot__byselect">
-                                    <option>Mới nhất</option>
-                                    <option>Bán chạy</option>
-                                    <option>Nổi bật</option>
-                                    <option>Jewellery</option>
-                                    <option>Giá bán</option>
-                                   
-                                </select>
+                               <div class="btn-group">
+                                    <button type="button" class="border button dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{nameSort}}
+                                    </button>
+                                    <div class="dropdown-menu">                   
+                                        <a type="submit" href="?sort=0" class="dropdown-item" >Giá tăng dần</a>
+                                        <a type="submit" href="?sort=1" class="dropdown-item" >Giá giảm dần</a>
+                                        <a type="submit" href="?sort=2" class="dropdown-item" >Từ A->Z</a>
+                                        <a type="submit" href="?sort=3" class="dropdown-item" >Từ Z->A</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -104,7 +107,7 @@
                   <ul class="wn__pagination">
                     {{#isnt currentPage 1}}
                     <li>
-                        <a href="/listbook?page={{prevPage}}&catid={{catID}}&search={{nameSearch}}">
+                        <a href="/listbook?{{prevPageQueryString}}">
                           <span aria-hidden="true" class="zmdi zmdi-chevron-left"></span>
                         </a>
                     </li>
@@ -112,7 +115,7 @@
 
                     {{#if hasPreviousPage}}
                     <li>
-                        <a href="/listbook?{{prePageQueryString}}">
+                        <a href="/listbook?{{prevPageQueryString}}">
                           {{prevPage}}
                         </a>
                     </li>
@@ -136,7 +139,7 @@
 
                     {{#gt lastPage currentPage}}
                     <li>
-                        <a href="/listbook?page={{nextPage}}&catid={{catID}}&search={{nameSearch}}" >
+                        <a href="/listbook?{{nextPageQueryString}}" >
                           <span aria-hidden="true" class="zmdi zmdi-chevron-right"></span>
                         </a>
                     </li>

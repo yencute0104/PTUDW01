@@ -30,12 +30,28 @@ exports.list = async () => {
     //console.dir(books);
     return books;
 }
-exports.listbook = async (filter, pageNumber, itemPerPage) => {
-    //const booksCollection = db().collection('Books');
-    let books = await booksCollection.paginate(filter, {
-        page: pageNumber,
-        limit: itemPerPage,
-    });
+exports.listbook = async (filter, pageNumber, itemPerPage, sort ) => {
+    
+    const sortOrderArr = [1,-1,1,-1];
+    let books;
+
+    if (sort ===0 || sort===1)
+    {
+        books = await booksCollection.paginate(filter, {
+            page: pageNumber,
+            limit: itemPerPage,
+            sort: {basePrice: sortOrderArr[sort]}
+        });
+    }
+    else 
+    {
+        books = await booksCollection.paginate(filter, {
+            page: pageNumber,
+            limit: itemPerPage,
+            sort: {unsigned_title: sortOrderArr[sort]}
+        });
+    }
+   
     return books;
 }
 

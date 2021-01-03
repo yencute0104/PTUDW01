@@ -33,6 +33,12 @@ exports.update_profile = async(req, res, next) => {
                     });
             });
         }
+        else
+        {
+            userModel.update_profile(fields,req.params.id).then(()=>{
+                res.redirect('../../');
+                });
+        }
         //  // Update books from model
         // console.log(tmp);
         // userModel.update_profile(fields,ID).then(()=>{
