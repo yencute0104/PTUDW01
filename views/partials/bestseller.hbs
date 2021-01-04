@@ -1,0 +1,19 @@
+<div class="col-lg-3 col-md-4 col-sm-6 col-12"> 
+    <div class="product product__style--3">
+        <div class="product__thumb">
+            <a  href="/listbook/{{this._id}}"><img src="{{this.cover}}" alt="product image" width="240" height="370"></a>
+            <div class="hot__box">
+                <span class="hot-label">{{this.status}}</span>
+            </div>
+        </div>
+
+        <div class="product__content content--center">
+            <h4><a href="single-product.html">{{this.title}}</a></h4>
+            <ul class="prize d-flex">
+                <li>{{this.basePrice}} vnđ</li>
+                <li class="old_prize">{{this.oldPrice}} vnđ</li>
+            </ul>
+        </div>
+        
+    </div>
+</div>

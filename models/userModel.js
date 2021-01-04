@@ -52,6 +52,26 @@ exports.addUser = async (newUser) => {
     return;
 }
 
+exports.change_password = async (username, newPassword) => {
+    const saltRounds = 10;
+    bcrypt.genSalt(saltRounds, function(err, salt) {
+        bcrypt.hash(newPassword, salt, function(err, hash) {
+            let user = userCollection.updateOne(
+                {username: username},
+                {password: hash}
+                
+            );
+            user
+            .update()
+            .then((doc)=>{})
+            .then((err)=>{
+                console.log(err);
+            });
+        });
+    });
+    return;
+}
+
 /**
  * Check for valid username and password, return user info if valid
  * @param {*} username 
@@ -80,6 +100,13 @@ exports.getUser = (id) => {
 
 exports.getNameUser = (username)=>{
     const kt = userCollection.findOne({username: username});
+    if (!kt)
+        return false;
+    return kt;
+}
+
+exports.getEmailUser = (email)=>{
+    const kt = userCollection.findOne({email: email});
     if (!kt)
         return false;
     return kt;

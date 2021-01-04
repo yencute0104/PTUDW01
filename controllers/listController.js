@@ -37,34 +37,68 @@ exports.index = async (req, res, next) => {
     if (tmp_nameCat)
        nameCat = tmp_nameCat;
 
-    const filter = {};
+    //const filter = {};
+    var filter = {isDeleted: false};
 
     if (catid)
     {
         if (nameCat != "Tất cả")
-            filter.catID = ObjectId(catid);
+        {
+            if (search)
+            {
+                const searchval = new RegExp(search, 'i');
+                const searchval1 = new RegExp(showUnsignedString(search), 'i');
+                filter = {$or: [
+                                {title: searchval }, 
+                                { detail: searchval}, 
+                                {author: searchval}, 
+                                {unsigned_title: searchval1 }],
+                                catID: ObjectId(catid), isDeleted: false};
+            }
+            else
+                filter = {catID: ObjectId(catid), isDeleted: false};
+        }  
+        else
+        {
+            if (search)
+            {
+                const searchval = new RegExp(search, 'i');
+                const searchval1 = new RegExp(showUnsignedString(search), 'i');
+                filter = {$or: [
+                                {title: searchval }, 
+                                { detail: searchval}, 
+                                {author: searchval}, 
+                                {unsigned_title: searchval1 }],
+                                isDeleted: false};
+            }
+            
+        }        
     }
-    if (search)
+    else
     {
-        filter.unsigned_title= new RegExp(showUnsignedString(search), 'i');
+        if (search)
+        {
+            const searchval = new RegExp(search, 'i');
+            const searchval1 = new RegExp(showUnsignedString(search), 'i');
+            filter = {$or: [
+                            {title: searchval }, 
+                            { detail: searchval}, 
+                            {author: searchval}, 
+                            {unsigned_title: searchval1 }],
+                            isDeleted: false};
+        }
     }
-
-    filter.isDeleted =  false;
     
     const paginate = await bookModel.listbook(filter,page,item_per_page, sort);
     const category =  await bookModel.listcategory();
-    //const listcatID = await bookModel.getlistcatID(category);
 
-    // const querystring = buildUrl('', {
-    //     path: 'listbook',
-    //     queryParams: {
-    //       catID: 'id',
-    //       id: listcatID
-    //     }
-    //   });
+    // for (index in category)
+    //     category[index].nameSearch = search;
+  
     const prevPageQueryString = {...req.query, page:paginate.prevPage};
     const nextPageQueryString = {...req.query, page:paginate.nextPage};
-    // const catQueryString = { }
+   
+    console.log(queryString.stringify(query));
     
     res.render('./books/listbook', {
         title: "Sách",
@@ -119,14 +153,3 @@ exports.detail = async (req, res, next) => {
   
 };
 
-// exports.index = (req, res, next) => {
-//     // Get books from model
-//     const books =  bookModel.list();
-//     // Pass data to view to display list of books
-//     res.render('list', {books});
-// };
-
-// exports.detail = (req,res, next) => {
-    
-//     res.render('detail', bookModel.get(parseInt(req.params.id))) ;
-//};

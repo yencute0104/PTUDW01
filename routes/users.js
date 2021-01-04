@@ -39,6 +39,9 @@ router.post('/register', userController.addUser);
 router.get('/profile/:id', checkAuthentication, userController.profile);
 router.post('/profile/:id', userController.update_profile);
 
+router.get('/change_password/:id',checkAuthentication, userController.change_password_page);
+router.post('/change_password/:id',checkAuthentication, userController.change_password);
+
 router.get('/logout', checkAuthentication, function(req,res,next){
   req.logout();
   res.redirect('/');

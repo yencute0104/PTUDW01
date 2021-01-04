@@ -6,6 +6,13 @@
 						
 						<div class="my__account__wrapper  ">
 							<h3 class="account__title">Register</h3>
+							 <div class="input__box ">
+                                    {{#if messageSuccess}}
+                                    <div class="alert alert-success">
+                                        {{messageSuccess}}
+                                    </div>
+                                    {{/if}}
+                            </div>       
 							<form method="post">
 								<div class="account__form">
                                     <div class="input__box" width="200">

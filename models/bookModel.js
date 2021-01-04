@@ -30,6 +30,11 @@ exports.list = async () => {
     //console.dir(books);
     return books;
 }
+exports.listStatus = async (status) => {
+    const books = await booksCollection.find({status: status});
+    return books;
+}
+
 exports.listbook = async (filter, pageNumber, itemPerPage, sort ) => {
     
     const sortOrderArr = [1,-1,1,-1];

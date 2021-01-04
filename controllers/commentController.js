@@ -7,9 +7,10 @@ exports.add_comment = async(req, res, next) => {
     const bookID = req.params.id;
     const nickname = req.body.nickname ? req.body.nickname: req.user.username;
     const content = req.body.content;
-    
-    if (await userModel.getNameUser(nickname))
+
+    if (await userModel.getNameUser(nickname) && !req.user)
     {
+        
         const category =  await bookModel.listcategory();
         const bookID = req.params.id;
         const book = await bookModel.get(bookID);

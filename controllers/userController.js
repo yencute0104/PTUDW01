@@ -24,6 +24,60 @@ exports.profile = async(req, res, next) => {
      res.render('users/profile',{title: 'Profile'}); 
 };
 
+exports.change_password_page = (req, res, next) => {
+        res.render('users/change_password',{ title: 'Đổi mật khẩu'}); 
+};
+
+exports.change_password = async (req, res, next) => {
+    const {oldPassword, newPassword, renewPassword} = req.body;
+    const isTruePassword = await userModel.checkCredential(req.user.username, oldPassword);
+    console.log(req.user.username);
+    try
+    {
+        if (isTruePassword)
+        {
+            if (newPassword != showUnsignedString(newPassword))
+            {
+                throw("Mật khẩu không được có dấu");
+                return;
+            }
+    
+            if (newPassword.includes(' '))
+            {
+                throw("Mật khấu không được chứa khoảng trắng");
+                return;
+            }
+
+            if (newPassword.length <8)
+            {
+                throw("Mật khấu chứa ít nhất 8 kí tự");
+                return;
+            }
+
+            if (newPassword != renewPassword)
+            {
+                throw("Mật khấu nhập lại không đúng");
+                return;
+            }
+
+            await userModel.change_password(req.user.username, newPassword);
+            res.render('users/change_password', {title: 'Đổi mật khẩu', messageSuccess: "Đổi mật khẩu thành công!"});
+
+        }
+        else
+        {
+            throw ("Mật khẩu cũ không đúng");
+            return;
+        }
+    }
+    catch (err)
+    {
+        res.render('users/change_password',{ title: 'Đổi mật khẩu', message: err}); 
+    }
+   
+  
+};
+
 exports.update_profile = async(req, res, next) => {
     
     const form = formidable({ multiples: true });
@@ -33,16 +87,27 @@ exports.update_profile = async(req, res, next) => {
           return;
         }
         const coverImage = files.txtProfilePic;
-        if (coverImage && coverImage.size > 0) {
-            // const filename = coverImage.path.split('\\').pop() + '.' + coverImage.name.split('.').pop();
-            // fs.renameSync(coverImage.path, process.env.USER_IMAGE_FOLDER + '\\' + filename);
-            // fields.txtProfilePic =  '\\images\\users\\' + filename;
+        const imageType = ["image/png", "image/jpeg"];
+
+        // ảnh bìa phải là 1 file ảnh
+      
+        if (coverImage && coverImage.size > 0) 
+        {
+            if (imageType.indexOf(coverImage.type) >=0 )  
+            {
+
             cloudinary.uploader.upload(coverImage.path,function(err, result){
                 fields.txtProfilePic = result.url;
                 userModel.update_profile(fields,req.params.id).then(()=>{
                     res.redirect('../../');
                     });
             });
+            }
+            else
+                userModel.update_profile(fields,req.params.id).then(()=>{
+                res.redirect('../../');
+                });
+
         }
         else
         {
@@ -70,8 +135,6 @@ exports.addUser = async (req, res) => {
         repassword
     };
 
-    
-
     try {
         req.checkBody('password','Mật khẩu phải có ít nhất 8 kí tự').isLength({min:8});
         const err = req.validationErrors();
@@ -81,15 +144,30 @@ exports.addUser = async (req, res) => {
             return;
         }
             
-        const check = await userModel.getNameUser(username);
-        if (!check)
+        const checkUsername = await userModel.getNameUser(username);
+        const checkEmail = await userModel.getEmailUser(email);
+
+        if (!checkUsername && !checkEmail)
         {
             if (username === showUnsignedString(username))
             {
+                if (password != showUnsignedString(password))
+                {
+                    throw("Mật khẩu không được có dấu");
+                    return;
+                }
+
+                if (password.includes(' '))
+                {
+                    throw("Mật khấu không được chứa khoảng trắng");
+                    return;
+                }
+                
                 if (password === repassword)
                 {
                     await userModel.addUser(newUser);
-                    res.redirect('/users/login');
+                    res.render('users/register',{title: "Đăng ký", messageSuccess: "Đăng ký thành công!" });
+                    // res.redirect('/users/login');
                 }
                 else
                 {
@@ -112,7 +190,7 @@ exports.addUser = async (req, res) => {
     catch (err)
     {
         const message = err;
-        res.render('users/register',{title: "Register", message, hasErr: message.length >0, username, email, password });
+        res.render('users/register',{title: "Đăng ký", message, hasErr: message.length >0, username, email, password });
         return;
     }
 };
