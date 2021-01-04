@@ -25,14 +25,15 @@ exports.detailOrder = async (req, res, next) => {
 
 exports.createOrder = async (req,res,next) => {
     const {firstName, lastName, phone, city, district, ward, address} = req.body;
-    const cart = req.user.cart;
+    var cart = req.user.cart;
     const id = req.user._id;
     const username = req.user.username;
     const totalOrder = req.user.cart.totalPrice + parseInt(30000);
     const newOrder = {
         id, username, firstName, lastName, phone, city, district, ward, address, cart, totalOrder
     }
-    await orderModel.createOrder(newOrder);
+    await orderModel.createOrder(newOrder, new cartModel(cart).generateArray());
+
     await userModel.createCart(req.user._id, null);
     //req.flash('success','Đơn hàng đã đặt thành công');
     res.redirect('../../carts/listcart');

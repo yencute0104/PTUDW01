@@ -8,9 +8,9 @@
         						<div class="col-lg-6 col-12">
         							<div class="wn__fotorama__wrapper">
 	        							<div class="fotorama wn__fotorama__action" data-nav="thumbs">
-		        							 <img src="{{book.cover}}" width="340px" height="270px"/>	
+		        							 <img src="{{book.cover}}" width="270px" height="340px"/>	
 											 {{#each listCover}}																				
-		        							 <img src="{{this}}" width="340px" height="270px"/>
+		        							 <img src="{{this}}" width="270px" height="340px"/>
 											  {{/each}}
 	        							</div>
         							</div>
@@ -31,15 +31,21 @@
         									
         								</div>
 										<form method="post">
+										{{#lt book.storeNumber 1}}
+										<div class="addtocart__actions box-tocart">
+											<h3 style="color: red" >Hết hàng</h3>
+										</div>
+										{{else}}
         								<div class="box-tocart d-flex">
         									<span>Số lượng: </span>
-        									<input id="qty" class="input-text qty" name="qty" min="1" value="1"  title="Qty" type="number">
+        									<input id="qty" class="input-text qty" name="qty" min="1" max="{{book.storeNumber}}" value="1"  title="Qty" type="number">
 										</div>
 										<div class="box-tocart d-flex">
 											<div class="addtocart__actions">
         										<button class="tocart" type="submit" title="Add to Cart" >Thêm vào giỏ hàng </button>
         									</div>
 										</div>
+										{{/lt}}
 										</form>
         							</div>
         						</div>

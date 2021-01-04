@@ -4,6 +4,17 @@ const formidable = require('formidable');
 const cloudinary = require('cloudinary').v2;
 const fileupload = require('express-fileupload');
 
+function showUnsignedString(search) {
+    var signedChars = "àảãáạăằẳẵắặâầẩẫấậđèẻẽéẹêềểễếệìỉĩíịòỏõóọôồổỗốộơờởỡớợùủũúụưừửữứựỳỷỹýỵÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬĐÈẺẼÉẸÊỀỂỄẾỆÌỈĨÍỊÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢÙỦŨÚỤƯỪỬỮỨỰỲỶỸÝỴ";
+    var unsignedChars = "aaaaaaaaaaaaaaaaadeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyAAAAAAAAAAAAAAAAADEEEEEEEEEEEIIIIIOOOOOOOOOOOOOOOOOUUUUUUUUUUUYYYYY";
+    var input = search;
+    var pattern = new RegExp("[" + signedChars + "]", "g");
+    var output = input.replace(pattern, function(m, key, value) {
+        return unsignedChars.charAt(signedChars.indexOf(m));
+    });
+    return output;
+}
+
 exports.index = (req, res, next) => {
     res.render('users/login',{title: 'Đăng Nhập'});
 };
@@ -49,19 +60,17 @@ exports.update_profile = async(req, res, next) => {
 };
 
 exports.addUser = async (req, res) => {
-    // const username = req.body.username;
-    // const email = req.body.email;
-    // const password = req.body.password;
-
-    const {username, email, password} = req.body;
+ 
+    const {username, email, password, repassword} = req.body;
 
     const newUser = {
         username,
         email,
-        password
+        password,
+        repassword
     };
 
-    console.log (newUser);
+    
 
     try {
         req.checkBody('password','Mật khẩu phải có ít nhất 8 kí tự').isLength({min:8});
@@ -75,8 +84,23 @@ exports.addUser = async (req, res) => {
         const check = await userModel.getNameUser(username);
         if (!check)
         {
-            await userModel.addUser(newUser);
-            res.redirect('/users/login');
+            if (username === showUnsignedString(username))
+            {
+                if (password === repassword)
+                {
+                    await userModel.addUser(newUser);
+                    res.redirect('/users/login');
+                }
+                else
+                {
+                    throw("Mật khẩu nhập lại không đúng");
+                    return;
+                }
+            }
+            else 
+            {
+                throw("Tên đăng nhập không được có dấu");
+            }
         }
         else 
         {
@@ -92,19 +116,3 @@ exports.addUser = async (req, res) => {
         return;
     }
 };
-
-
-
-// exports.logout = async (req, res, next) => {
-//     // Get books from model
-//     //const books = bookModel.list();
-//     // Pass data to view to display list of books
-//     await res.render('account');
-// };
-
-// exports.register = async (req, res, next) => {
-//     // Get books from model
-//     //const books = bookModel.list();
-//     // Pass data to view to display list of books
-//     await res.render('account');
-// };

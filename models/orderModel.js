@@ -1,7 +1,19 @@
 const { ObjectId} = require('mongodb');
 const orderCollection = require('./MongooseModel/orderMongooseModel');
+const bookCollection = require('./MongooseModel/bookMongooseModel');
 
-exports.createOrder = async (newOrder) => {
+exports.createOrder = async (newOrder, cart) => {
+
+    for (var index in cart) {
+        const book = await bookCollection.findOne({ _id: ObjectId(cart[index].item._id) });
+        const storeNumber = book.storeNumber - cart[index].qty;
+        const saleNumber = book.saleNumber + cart[index].qty;
+        await bookCollection.updateOne({ _id: ObjectId(cart[index].item._id) }, {
+            storeNumber: storeNumber,
+            saleNumber: saleNumber
+        })
+    }
+
     await orderCollection.create({
         userID: ObjectId(newOrder.id),
         username: newOrder.username,

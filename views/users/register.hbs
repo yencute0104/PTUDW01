@@ -13,12 +13,16 @@
 										<input type="text" name="username" value="{{username}}" required>
 									</div>
 									<div class="input__box">
-										<label>Email address <span>*</span></label>
+										<label>Email <span>*</span></label>
 										<input type="email" name="email" value="{{email}}" required>
 									</div>
 									<div class="input__box">
 										<label>Password<span>*</span></label>
 										<input type="password" name="password" value="{{password}}" required>
+									</div>
+									<div class="input__box">
+										<label>Enter the password <span>*</span></label>
+										<input type="password" name="repassword" value="{{repassword}}" required>
 									</div>
 									{{#if hasErr}}
 										<div class="alert alert-danger">
