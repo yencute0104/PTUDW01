@@ -19,15 +19,15 @@ exports.add_comment = async(req, res, next) => {
         // const comment = book.comment ? book.comment:[];
 
         const perpage = 5;
-    const current = parseInt(req.query.page) || 1;
-    const comment = await bookModel.listcomment(bookID, current, perpage);
-    const count_comment = book.comment.length || 0;    
-    const pages = Math.ceil(count_comment/perpage); 
-    const nextPage = current < pages ? (current+1): current;
-    const prevPage = current > 1 ? (current-1): 1;
-    const hasNextPage = current < pages;  
-    const hasPreviousPage = current > 1;
-    var avatar;
+        const current = parseInt(req.query.page) || 1;
+        const comment = await bookModel.listcomment(bookID, current, perpage);
+        const count_comment = book.comment.length || 0;    
+        const pages = Math.ceil(count_comment/perpage); 
+        const nextPage = current < pages ? (current+1): current;
+        const prevPage = current > 1 ? (current-1): 1;
+        const hasNextPage = current < pages;  
+        const hasPreviousPage = current > 1;
+        var avatar;
     for (id in comment)
     {
         avatar = await userModel.getProfilePicUser(comment[id].nickname);
@@ -48,14 +48,14 @@ exports.add_comment = async(req, res, next) => {
             err: "Nickname đã được sử dụng, vui lòng dùng tên khác",
             content,
             current,
-        nextPage,
-        prevPage,
-        totalComments: count_comment,
-        pages,
-        hasNextPage,
-        hasPreviousPage,
-        lastPage: pages,
-        show_active_2: "show active"
+            nextPage,
+            prevPage,
+            totalComments: count_comment,
+            pages,
+            hasNextPage,
+            hasPreviousPage,
+            lastPage: pages,
+            show_active_2: "show active"
         });
 
     }

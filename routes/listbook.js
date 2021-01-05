@@ -9,6 +9,7 @@ const commentController = require('../controllers/commentController');
 router.get('/', listController.index);
 router.get('/:id',listController.detail);
 router.post('/:id',cartController.add_to_cart);
+router.get('add_to_cart/:id',cartController.add_to_cart);
 router.post('/submit_comment/:id', commentController.add_comment);
 
 // /* GET home page. */

@@ -123,9 +123,11 @@
                         </nav>
                         {{/gt}}       
                     </div>
+                   
                     <div class="shop-grid tab-pane fade" id="nav-list" role="tabpanel">
                         <div class="list__view__wrapper">
                             <!-- Start Single Product -->
+                             <form method="post">
                             {{#each books}}
                             <div class="list__view">
                                 <div class="thumb">
@@ -140,17 +142,18 @@
                                     </ul>
                                     <p>{{descript}}</p>
                                     <ul class="cart__action d-flex">
-                                        <li class="cart"><a href="cart.html">Thêm vào giỏ hàng</a></li>
+                                        <li class="cart"><a href="/listbook/add_to_cart/{{_id}}" type="submit">Thêm vào giỏ hàng</a></li>
+                                        <input type="number" name="qty" value="1" hidden>
                                     </ul>
 
                                 </div>
                             </div>
                             {{/each}}
                             <!-- End Single Product -->
-                          
+                            </form>
                         </div>
                     </div>
-
+                    
                     
                 </div>
             </div>

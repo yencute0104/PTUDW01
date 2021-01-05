@@ -8,9 +8,9 @@
 						<div class="col-lg-6 col-12">
 							<div class="wn__fotorama__wrapper">
 								<div class="fotorama wn__fotorama__action" data-nav="thumbs">
-										<img src="{{book.cover}}" width="270px" height="340px"/>	
+										<img src="{{book.cover}}" />	
 										{{#each listCover}}																				
-										<img src="{{this}}" width="270px" height="340px"/>
+										<img src="{{this}}" />
 										{{/each}}
 								</div>
 							</div>
@@ -93,14 +93,8 @@
 											</div>																								
 										</div>	
 										{{/each}}										
-									</div>												
-								{{/gt}}  
-								{{#eq totalComments 0}}
-									<p>Không có bình luận nào.</p>
-								{{/eq}}																			
-
-								
-								<nav aria-label="Page navigation example" style="..."> 
+									</div>
+										<nav aria-label="Page navigation example" style="..."> 
 								<ul class="wn__pagination">
 									{{#isnt current 1}}
 									<li>
@@ -144,6 +138,11 @@
 								</ul>
 								</nav>
 								 
+								{{/gt}}  
+								{{#eq totalComments 0}}
+									<p>Không có bình luận nào.</p>
+								{{/eq}}																			
+							
 
 							</div>								
 							<div class="review-fieldset">
