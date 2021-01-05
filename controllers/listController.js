@@ -97,8 +97,6 @@ exports.index = async (req, res, next) => {
   
     const prevPageQueryString = {...req.query, page:paginate.prevPage};
     const nextPageQueryString = {...req.query, page:paginate.nextPage};
-   
-    console.log(queryString.stringify(query));
     
     res.render('./books/listbook', {
         title: "Sách",
@@ -128,8 +126,21 @@ exports.detail = async (req, res, next) => {
     const book = await bookModel.get(bookID);
     const bookCat = await bookModel.get_name_cat(book.catID);
     const relatedBook = await bookModel.getRelatedBooks(book.catID, bookID);
-    const comment = book.comment ? book.comment:[];
+    //const comment = book.comment ? book.comment:[];
     const listCover = book.listCover;
+
+    // tính toán phân trang bình luận
+    const perpage = 2;
+    const current = parseInt(req.query.page) || 1;
+    const comment = await bookModel.listcomment(bookID, current, perpage);
+    const count_comment = book.comment.length || 0;    
+    const pages = Math.ceil(count_comment/perpage); 
+    const nextPage = current < pages ? (current+1): current;
+    const prevPage = current > 1 ? (current-1): 1;
+    const hasNextPage = current < pages;  
+    const hasPreviousPage = current > 1;
+
+    // tìm avatar của người bình luận nếu có
     var avatar;
     for (id in comment)
     {
@@ -137,18 +148,27 @@ exports.detail = async (req, res, next) => {
         if (avatar)
             comment[id].avatar = avatar;
     }
-    
+
     res.render('./books/detail', 
     {   
         title: "Chi tiết",
         category,
         book,
+        bookID,
         listCover,
         bookCat,
         relatedBook,
         countRelatedBooks: relatedBook.length,
-        comment,
-        show_active_1: "show active"
+        comment: comment,
+        current,
+        nextPage,
+        prevPage,
+        totalComments: count_comment,
+        pages,
+        hasNextPage,
+        hasPreviousPage,
+        lastPage: pages,
+        show_active_2: "show active"
     });
   
 };

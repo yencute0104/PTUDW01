@@ -35,6 +35,7 @@ exports.listStatus = async (status) => {
     return books;
 }
 
+
 exports.listbook = async (filter, pageNumber, itemPerPage, sort ) => {
     
     const sortOrderArr = [1,-1,1,-1];
@@ -86,6 +87,9 @@ exports.add_comment = async (id, cmt) => {
     )
 }
 
-// exports.list = () => books;
+exports.listcomment = async (bookID, page, perPage) => {
 
-// exports.get = (id) => books.find(b=>b.id ===id);
+    const arr_comment = await booksCollection.findOne({ _id: ObjectId(bookID) }).select("comment");
+    const comment = arr_comment.comment.slice(perPage * (page-1), perPage*page);
+    return comment;
+}
