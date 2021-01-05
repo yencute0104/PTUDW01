@@ -7,7 +7,7 @@ const bookModel = require('../models/bookModel');
 const commentModel = require('../models/commentModel');
 const userModel = require('../models/userModel');
 const { Query } = require('mongoose');
-const item_per_page = 5;
+const item_per_page = 6;
 
 function showUnsignedString(search) {
     var signedChars = "àảãáạăằẳẵắặâầẩẫấậđèẻẽéẹêềểễếệìỉĩíịòỏõóọôồổỗốộơờởỡớợùủũúụưừửữứựỳỷỹýỵÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬĐÈẺẼÉẸÊỀỂỄẾỆÌỈĨÍỊÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢÙỦŨÚỤƯỪỬỮỨỰỲỶỸÝỴ";
@@ -130,7 +130,7 @@ exports.detail = async (req, res, next) => {
     const listCover = book.listCover;
 
     // tính toán phân trang bình luận
-    const perpage = 2;
+    const perpage = 5;
     const current = parseInt(req.query.page) || 1;
     const comment = await bookModel.listcomment(bookID, current, perpage);
     const count_comment = book.comment.length || 0;    

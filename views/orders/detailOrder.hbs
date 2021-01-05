@@ -23,7 +23,22 @@
                                     <label>Địa chỉ: {{address}}</label>
                                 </div>
 								<div>
-									<a class="btn border button" href="/users/order" role="button"><i class="fas fa-angle-double-left"></i> Trở lại</a> 
+                                    <label>Trạng thái: <span style="color: red;" >{{order.status}}</span></label>
+                                </div>
+								<div>
+									<div class="row">
+										<div class="col-lg-2">
+											<a class="btn border button" href="/users/order" role="button"><i class="fas fa-angle-double-left"></i> Trở lại</a> 
+										</div>
+										{{#if isWaiting}}
+										<div class="col">
+											<a href="/users/order/cancel/{{order._id}}" class="btn btn-danger">
+                                                    <i class="fas fa-times"></i>
+                                                        Hủy đơn
+                                            </a>
+										</div>
+										{{/if}}
+									</div>
 								</div>
         					</div>
         				

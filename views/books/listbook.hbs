@@ -10,30 +10,11 @@
                         <h3 class="wedget__title">Danh mục sản phẩm</h3>
                         <ul>
                             {{#each category}}
-                                <li><a href="/listbook?catid={{_id}}" name="cat" >{{catogory}}</a></li>
+                                <li><a href="/listbook?catid={{_id}}&search={{nameSearch}}" name="cat" >{{catogory}}</a></li>
                             {{/each}}
                         </ul>
                     </aside>
-                    <aside class="wedget__categories pro--range">
-                        <h3 class="wedget__title">Lọc theo giá sản phẩm</h3>
-                        <div class="content-shopby">
-                            <div class="price_filter s-filter clear">
-                                <form action="#" method="GET">
-                                    <div id="slider-range"></div>
-                                    <div class="slider__range--output">
-                                        <div class="price__output--wrap">
-                                            <div class="price--output">
-                                                <span>Giá :</span><input type="text" id="amount" readonly="">
-                                            </div>
-                                            <div class="price--filter">
-                                                <a href="#">Lọc</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </aside>
+                  
                     <aside class="wedget__categories poroduct--tag">
                         <h3 class="wedget__title">Thẻ</h3>
                         <ul>
@@ -42,13 +23,7 @@
                             {{/each}}
                         </ul>
                     </aside>
-                    <aside class="wedget__categories sidebar--banner">
-                        <img src="https://www.pinterest.com/pin/547820742177463406/" alt="banner images">
-                        <div class="text">
-                            <h2>Sản phẩm mới</h2>
-                            <h6>Tiết kiệm tới <br> <strong>40%</strong></h6>
-                        </div>
-                    </aside>
+                 
                 </div>
             </div>
             <div class="col-lg-9 col-12 order-1 order-lg-2">
@@ -102,51 +77,51 @@
                             {{/each}}
                             <!-- End Single Product -->
                         </div>
-                {{#gt totalBooks 0}}
-                <nav aria-label="Page navigation example" style="..."> 
-                  <ul class="wn__pagination">
-                    {{#isnt currentPage 1}}
-                    <li>
-                        <a href="/listbook?{{prevPageQueryString}}">
-                          <span aria-hidden="true" class="zmdi zmdi-chevron-left"></span>
-                        </a>
-                    </li>
-                    {{/isnt}}
+                        {{#gt totalBooks 0}}
+                        <nav aria-label="Page navigation example" style="..."> 
+                        <ul class="wn__pagination">
+                            {{#isnt currentPage 1}}
+                            <li>
+                                <a href="/listbook?{{prevPageQueryString}}">
+                                <span aria-hidden="true" class="zmdi zmdi-chevron-left"></span>
+                                </a>
+                            </li>
+                            {{/isnt}}
 
-                    {{#if hasPreviousPage}}
-                    <li>
-                        <a href="/listbook?{{prevPageQueryString}}">
-                          {{prevPage}}
-                        </a>
-                    </li>
-                    {{/if}}
+                            {{#if hasPreviousPage}}
+                            <li>
+                                <a href="/listbook?{{prevPageQueryString}}">
+                                {{prevPage}}
+                                </a>
+                            </li>
+                            {{/if}}
 
-                    
-                  
-                    <li class="active">
-                        <a href="javascript:void(0)" tabindex="-1">
-                          {{currentPage}}
-                        </a>
-                    </li>
+                            
+                        
+                            <li class="active">
+                                <a href="javascript:void(0)" tabindex="-1">
+                                {{currentPage}}
+                                </a>
+                            </li>
 
-                    {{#if hasNextPage}}
-                    <li>
-                        <a  href="/listbook?{{nextPageQueryString}}">
-                          {{nextPage}}
-                        </a>
-                    </li>
-                    {{/if}}
+                            {{#if hasNextPage}}
+                            <li>
+                                <a  href="/listbook?{{nextPageQueryString}}">
+                                {{nextPage}}
+                                </a>
+                            </li>
+                            {{/if}}
 
-                    {{#gt lastPage currentPage}}
-                    <li>
-                        <a href="/listbook?{{nextPageQueryString}}" >
-                          <span aria-hidden="true" class="zmdi zmdi-chevron-right"></span>
-                        </a>
-                    </li>
-                    {{/gt}}
-                  </ul>
-                  </nav>
-                {{/gt}}       
+                            {{#gt lastPage currentPage}}
+                            <li>
+                                <a href="/listbook?{{nextPageQueryString}}" >
+                                <span aria-hidden="true" class="zmdi zmdi-chevron-right"></span>
+                                </a>
+                            </li>
+                            {{/gt}}
+                        </ul>
+                        </nav>
+                        {{/gt}}       
                     </div>
                     <div class="shop-grid tab-pane fade" id="nav-list" role="tabpanel">
                         <div class="list__view__wrapper">
@@ -166,8 +141,6 @@
                                     <p>{{descript}}</p>
                                     <ul class="cart__action d-flex">
                                         <li class="cart"><a href="cart.html">Thêm vào giỏ hàng</a></li>
-                                        <li class="wishlist"><a href="cart.html"></a></li>
-                                        <li class="compare"><a href="cart.html"></a></li>
                                     </ul>
 
                                 </div>

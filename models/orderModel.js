@@ -34,6 +34,20 @@ exports.getOrder = async (id) =>{
     const order = await orderCollection.findOne({_id: ObjectId(id)});
     return order;
 };
+exports.cancelOrder = async (id) =>{
+    const order = await orderCollection.findOne({ _id: ObjectId(id) });
+    const listCart = order.cart.items;
+    for (var index in listCart) {
+        const book = await bookCollection.findOne({ _id: ObjectId(listCart[index].item._id) });
+        const storeNumber = book.storeNumber + listCart[index].qty;
+        const saleNumber = book.saleNumber - listCart[index].qty;
+        await bookCollection.updateOne({ _id: ObjectId(listCart[index].item._id) }, {
+            storeNumber: storeNumber,
+            saleNumber: saleNumber
+        })
+    }
+    await orderCollection.updateOne({_id: ObjectId(id)}, {status: "Hủy"});
+};
 
 exports.getListOrderWithStatus = async (id, status) =>{
     const listOrder = await orderCollection.find({userID: ObjectId(id), status: status});

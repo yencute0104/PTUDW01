@@ -6,5 +6,5 @@ const orderController = require('../controllers/orderController');
 
 router.get('/', orderController.index);
 router.get('/:id', orderController.detailOrder);
-
+router.get('/cancel/:id', orderController.cancelOrder);
 module.exports = router;
