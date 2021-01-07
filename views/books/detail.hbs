@@ -79,7 +79,7 @@
 						
 						<div class="pro__tab_label tab-pane fade {{show_active_2}}" id="nav-review" role="tabpanel">
 							<form action="/listbook/submit_comment/{{book._id}}" method="POST">
-							<div class="review__attribute">
+							{{!-- <div class="review__attribute">
 								{{#gt totalComments 0}}										
 									<div class="col-md-7">											
 										<div class="mt-3">
@@ -98,11 +98,11 @@
 													</div>
 													<p class="text-justify comment-text mb-0">{{content}}</p>
 												</div>
-											</div>																								
+												</div>																								
 										</div>	
 										{{/each}}										
 									</div>
-										<nav aria-label="Page navigation example" style="..."> 
+								<nav aria-label="Page navigation example" style="..."> 
 								<ul class="wn__pagination">
 									{{#isnt current 1}}
 									<li>
@@ -144,15 +144,90 @@
 									</li>
 									{{/gt}}
 								</ul>
-								</nav>
-								 
+								</nav>								 
 								{{/gt}}  
 								{{#eq totalComments 0}}
 									<p>Không có bình luận nào.</p>
 								{{/eq}}																			
-							
+						
+							</div>	 --}}
 
-							</div>								
+							<div class="blog-details content">
+								<div class="comments_area">
+									{{#gt totalComments 0}}
+										<h3 class="comment__title">{{totalComments}} Bình luận</h3>
+										<ul class="comment__list">
+											{{#each comment}}
+											<li>
+												<div class="wn__comment">
+													<div class="thumb">
+														{{#if avatar}}
+														<img src="{{avatar}}" alt="comment images" width="45" height="45" class="rounded-circle">
+														{{else}}
+														<img src="/images/users/user.png" alt="comment images" class="rounded-circle">
+														{{/if}}
+													</div>										
+													<div class="content">
+														<div class="comnt__author d-block d-sm-flex">
+															<span><a href="#">{{nickname}}</a> Post author</span>
+															<div class="reply__btn">
+																<a href="#"></a>
+															</div>
+														</div>
+														<p>{{content}}</p>
+													</div>
+												</div>                                                              
+											</li>
+											{{/each}}    
+											<nav aria-label="Page navigation example" style="..."> 
+												<ul class="wn__pagination">
+													{{#isnt current 1}}
+													<li>
+														<a href="/home/listbook/{{bookID}}?page={{prevPage}}">
+														<span aria-hidden="true" class="zmdi zmdi-chevron-left"></span>
+														</a>
+													</li>
+													{{/isnt}}
+
+													{{#if hasPreviousPage}}
+													<li>
+														<a href="/home/listbook/{{bookID}}?page={{prevPage}}">
+														{{prevPage}}
+														</a>
+													</li>
+													{{/if}}
+
+													
+												
+													<li class="active">
+														<a href="javascript:void(0)" tabindex="-1">
+														{{current}}
+														</a>
+													</li>
+
+													{{#if hasNextPage}}
+													<li>
+														<a type="submit" href="/home/listbook/{{bookID}}?page={{nextPage}}">
+														{{nextPage}}
+														</a>
+													</li>
+													{{/if}}
+
+													{{#gt lastPage current}}
+													<li>
+														<a href="/home/listbook/{{bookID}}?page={{nextPage}}" >
+														<span aria-hidden="true" class="zmdi zmdi-chevron-right"></span>
+														</a>
+													</li>
+													{{/gt}}
+												</ul>
+											</nav>                         
+										</ul>
+									{{/gt}}
+								</div>
+							</div>
+
+
 							<div class="review-fieldset">
 								<h3>Để lại bình luận của bạn</h3>
 								<br>
@@ -163,7 +238,7 @@
 											<div><label><b>{{user.username}}</b></label> </div> --}}
 											{{!-- <span>Tên của bạn</span><input id="nickname_field" type="text" name="nickname"> --}}
 										{{else}}
-											<span>Tên của bạn</span><input id="nickname_field" type="text" name="nickname">
+											<span>Tên của bạn</span><input id="nickname_field" type="text" name="nickname" value="{{nickname}}">
 											{{#if err}}
 											<br>
 												<div class="alert alert-danger">
@@ -174,7 +249,7 @@
 									</div>
 									<div class="input__box">
 										<span>Bình luận</span>
-										<textarea name="content" value="{{content}}"></textarea>
+										<textarea name="content">{{content}}</textarea>
 									</div>
 									<div class="review-form-actions">
 										<button class="btn border button" type="submit" >Gửi bình luận</button>
