@@ -13,7 +13,9 @@ const user = new Schema(
     address: String,
     profilePic: String,
     cart: Object, 
-    status: String
+    status: String,
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 },
   {collection: 'Users'}
   );

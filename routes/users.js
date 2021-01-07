@@ -36,6 +36,21 @@ router.get('/register', function(req, res, next){
 })
 router.post('/register', userController.addUser);
 
+// router.get('/forget', isNotLogined, function(req, res, next){
+//   res.render('users/forget',{title: 'Lấy lại mật khẩu'});
+// })
+// router.post('/forget', userController.forget_pw);
+
+// router.get('/reset/:token', userController.reset);
+// router.post('/reset/:token', userController.reset_pw);
+
+// router.get('/auth/google',
+//   passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// router.get('/auth/google/callback', 
+//   passport.authenticate('google', { failureRedirect: '/users/login' }),
+//   (req, res) => res.redirect('/'));
+
 router.get('/profile/:id', checkAuthentication, userController.profile);
 router.post('/profile/:id', userController.update_profile);
 
@@ -54,6 +69,14 @@ function checkAuthentication(req,res,next){
       next();
   } else{
       res.redirect("/users/login");
+  }
+}
+
+function isNotLogined(req,res,next){
+  if(req.isAuthenticated()){
+    res.redirect("/");
+  } else{
+      next();
   }
 }
 module.exports = router;

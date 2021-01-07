@@ -3,6 +3,18 @@ const bcrypt = require('bcrypt');
 
 const userCollection = require('./MongooseModel/userMongooseModel');
 
+exports.update_resetpw = async(user, token) => {
+    await userCollection.updateOne({username: user.username}, 
+        {resetPasswordToken : token,
+        resetPasswordExpires : Date.now() + 3600000})
+}
+exports.find = async(token) => {
+    const user = userCollection.findOne({resetPasswordExpires: {$gt:  Date.now()}});
+    if (crypto.timingSafeEqual(Buffer.from(user.resetPasswordToken), Buffer.from(token)))
+        return user;
+    return false;
+};
+
 exports.menu = async(id) => {
     //console.log('model db');
     //const booksCollection = db().collection('Books');
@@ -98,7 +110,12 @@ exports.getUser = (id) => {
     return userCollection.findOne({_id: id});
 }
 
-exports.getNameUser = (username)=>{
+// lấy username nhờ username và email
+exports.get = async (username, email) => {
+    return await userCollection.findOne({username: username, email: email});
+}
+
+exports.getNameUser = async (username)=>{
     const kt = userCollection.findOne({username: username});
     if (!kt)
         return false;

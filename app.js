@@ -10,6 +10,7 @@ const hbs = require('express-handlebars');
 const helpers = require('handlebars-helpers')();
 //const { MongoClient } = require("mongodb");
 
+// cài cho lấy lại mật khẩu, đăng nhập bằng mail
 
 require('dotenv').config();
 

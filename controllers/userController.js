@@ -3,6 +3,18 @@ const fs = require('fs');
 const formidable = require('formidable');
 const cloudinary = require('cloudinary').v2;
 const fileupload = require('express-fileupload');
+const crypto = require('crypto'); 
+const { promisify } = require('util');
+const nodemailer = require('nodemailer');
+const nodemailerSendgrid = require('nodemailer-sendgrid-transport');
+// const transport = nodemailer.createTransport('SMTP', {service: 'Gmail',
+//     auth: {
+//   user: "yencute0104@gmail.com",  // my actual email address here
+//   pass: "tanghoangyen"   // my actual password here
+// }
+//     // auth: {
+//     // api_key: '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'}
+// });
 
 function showUnsignedString(search) {
     var signedChars = "àảãáạăằẳẵắặâầẩẫấậđèẻẽéẹêềểễếệìỉĩíịòỏõóọôồổỗốộơờởỡớợùủũúụưừửữứựỳỷỹýỵÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬĐÈẺẼÉẸÊỀỂỄẾỆÌỈĨÍỊÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢÙỦŨÚỤƯỪỬỮỨỰỲỶỸÝỴ";
@@ -13,6 +25,11 @@ function showUnsignedString(search) {
         return unsignedChars.charAt(signedChars.indexOf(m));
     });
     return output;
+}
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}{|gmail.com|yahoo.com|}))$/;
+    return re.test(email);
 }
 
 exports.index = (req, res, next) => {
@@ -115,12 +132,6 @@ exports.update_profile = async(req, res, next) => {
                 res.redirect('../../');
                 });
         }
-        //  // Update books from model
-        // console.log(tmp);
-        // userModel.update_profile(fields,ID).then(()=>{
-        // res.redirect('../../');
-        // });
-        
       });
 };
 
@@ -146,6 +157,12 @@ exports.addUser = async (req, res) => {
             
         const checkUsername = await userModel.getNameUser(username);
         const checkEmail = await userModel.getEmailUser(email);
+
+        if (!validateEmail(email))
+        {
+            throw("Email không hợp lệ!");
+            return;
+        }
 
         if (!checkUsername && !checkEmail)
         {
@@ -193,4 +210,80 @@ exports.addUser = async (req, res) => {
         res.render('users/register',{title: "Đăng ký", message, hasErr: message.length >0, username, email, password });
         return;
     }
+};
+
+
+exports.forget_pw = async (req, res, next) => {
+
+    const token = (crypto.randomBytes)(20).toString('hex');
+    // const existUsername = await userModel.getNameUser(req.body.username);
+    // const existEmail = await userModel.getEmailUser(req.body.email);
+    // var user = (existUsername && existEmail);
+
+    const user = await userModel.get(req.body.username, req.body.email);
+
+    if (!user) {
+        req.flash('error', 'No account with that email address exists.');
+        return res.redirect('../forgot');
+    }
+
+    await userModel.update_resetpw(user, token);
+    //http://${req.headers.host}/reset/${token}
+    const resetEmail = {
+        to: user.email,
+        from: 'yencute0104@gmail.com',
+        subject: 'Đổi mật khẩu',
+        text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.
+        Please click on the following link, or paste this into your browser to complete the process:
+        http://localhost:4000/users/reset/${token}
+        If you did not request this, please ignore this email and your password will remain unchanged.`,
+    };
+
+    await transport.sendMail(resetEmail);
+    req.flash('info', `An e-mail has been sent to ${user.email} with further instructions.`);
+    res.redirect('../forgot');
+};
+
+
+exports.reset = async(req, res, next)=> {
+    const user = await userModel.find(req.params.token);
+    
+      if (!user) {
+        req.flash('error', 'Password reset token is invalid or has expired.');
+        return res.redirect('../forgot');
+      }
+    
+      //res.setHeader('Content-type', 'text/html');
+    //   res.end(templates.layout(`
+    //     ${templates.error(req.flash())}
+    //     ${templates.resetPassword(user.resetPasswordToken)}
+    //   `));
+    res.rend();
+};
+
+exports.reset_pw = async(req, res, next)=>{
+    const user = await userModel.find(req.params.token);
+    
+      if (!user) {
+        req.flash('error', 'Password reset token is invalid or has expired.');
+        return res.redirect('/forgot');
+      }
+    
+      user.password = req.body.password;
+      delete user.resetPasswordToken;
+      delete user.resetPasswordExpires;
+    
+      const resetEmail = {
+        to: user.email,
+        from: 'passwordreset@example.com',
+        subject: 'Your password has been changed',
+        text: `
+          This is a confirmation that the password for your account "${user.email}" has just been changed.
+        `,
+      };
+    
+      await transport.sendMail(resetEmail);
+      req.flash('success', `Success! Your password has been changed.`);
+    
+      res.redirect('/');
 };

@@ -16,18 +16,20 @@
 									</div>
 									<div class="form__btn">
 										<button type="submit">Login</button>
+									
 										<label class="label-for-checkbox">
 											<input id="rememberme" class="input-checkbox" name="rememberme" value="forever" type="checkbox">
 											<span>Remember me</span>
 										</label>
 									</div>
+										<a href="/users/auth/google">Sign In with Google</a>
 									<br>
 									{{#if hasErr}}
 										<div class="alert alert-danger">
 											{{message}}
 										</div>
 									{{/if}}
-									<a class="forget_pass" href="#">Lost your password?</a>
+									<a class="forget_pass" href="/users/forget">Lost your password?</a>
 								</div>
 							</form>
 						</div>
