@@ -224,6 +224,9 @@
 											</nav>                         
 										</ul>
 									{{/gt}}
+									{{#eq totalComments 0}}
+									<p>Chưa có bình luận.</p>
+									{{/eq}}	
 								</div>
 							</div>
 
@@ -238,7 +241,7 @@
 											<div><label><b>{{user.username}}</b></label> </div> --}}
 											{{!-- <span>Tên của bạn</span><input id="nickname_field" type="text" name="nickname"> --}}
 										{{else}}
-											<span>Tên của bạn</span><input id="nickname_field" type="text" name="nickname" value="{{nickname}}">
+											<span>Tên của bạn</span><input id="nickname_field" type="text" name="nickname" value="{{nickname}}" placeholder="Nhập tên của bạn ở đây">
 											{{#if err}}
 											<br>
 												<div class="alert alert-danger">
@@ -249,7 +252,7 @@
 									</div>
 									<div class="input__box">
 										<span>Bình luận</span>
-										<textarea name="content">{{content}}</textarea>
+										<textarea name="content" placeholder="Nhập bình luận ở đây">{{content}}</textarea>
 									</div>
 									<div class="review-form-actions">
 										<button class="btn border button" type="submit" >Gửi bình luận</button>
