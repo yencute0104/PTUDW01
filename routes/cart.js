@@ -7,6 +7,8 @@ const orderController = require('../controllers/orderController');
 
 router.get('/listcart',cartController.listcart);
 router.get('/listcart/remove/:id', cartController.deleteItem);
+router.get('/listcart/decrease/:id', cartController.decreaseItem);
+router.get('/listcart/increase/:id', cartController.increaseItem);
 router.get('/checkout',checkAuthentication, cartController.checkout);
 router.post('/checkout',checkAuthentication, orderController.createOrder);
 

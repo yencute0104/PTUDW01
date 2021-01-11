@@ -33,12 +33,23 @@ module.exports = function Cart(oldCart, qty){
     {
         this.totalQty -= this.items[id].qty;
         this.totalPrice -= this.items[id].price;
-        //this.qty = 0;
-        //this.totalQty = 0;
-        //this.totalPrice = 0;
-        //console.log(this.items[id].qty);
         delete this.items[id];
-        //console.log(this.items);
+    }
+
+    this.decreaseItem = function (id)
+    {
+        this.totalQty --;
+        this.items[id].qty --;
+        this.totalPrice -= this.items[id].item.basePrice;
+        this.items[id].price -= this.items[id].item.basePrice;
+    }
+
+    this.increaseItem = function (id)
+    {
+        this.totalQty ++;
+        this.items[id].qty ++;
+        this.totalPrice += this.items[id].item.basePrice;
+        this.items[id].price += this.items[id].item.basePrice;
     }
 
 };

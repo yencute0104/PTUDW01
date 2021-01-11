@@ -42,7 +42,7 @@ exports.createOrder = async (req,res,next) => {
     await orderModel.createOrder(newOrder, new cartModel(cart).generateArray());
 
     await userModel.createCart(req.user._id, null);
-    //req.flash('success','Đơn hàng đã đặt thành công');
+    req.flash('success','Đơn hàng đã đặt thành công');
     res.redirect('../../carts/listcart');
 };
 

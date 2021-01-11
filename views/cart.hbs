@@ -3,6 +3,13 @@
         <div class="cart-main-area section-padding--lg bg--white">
         <form method="post">
             <div class="container">
+                 {{#if error_1}}
+                        <div class="col text-center ">
+                            <div class="alert alert-danger">
+                                {{error_1}}
+                            </div>
+                        </div>
+                {{/if}}
                 {{#if books}}
                 <div class="row">
                     <div class="col-md-12 col-sm-12 ol-lg-12">
@@ -25,7 +32,13 @@
                                             <td class="product-thumbnail"><a href="/listbook/{{this.item._id}}"><img src={{this.item.cover}} alt="product img"></a></td>
                                             <td class="product-name"><a href="/listbook/{{this.item._id}}">{{this.item.title}}</a></td>
                                             <td class="product-price"><span id="price" class="amount" >{{this.item.basePrice}} vnđ</span></td>
-                                            <td class="product-price" ><span class="amount" name="qty">{{this.qty}}</span></td>
+                                            <td class="product-subtotal" >
+                                                <span class="amount" name="qty">
+                                                    <a href="/carts/listcart/decrease/{{this.item._id}}"><i class="fas fa-minus"></i></a> 
+                                                    &nbsp; &nbsp; {{this.qty}} &nbsp; &nbsp;
+                                                    <a href="/carts/listcart/increase/{{this.item._id}}"><i class="fas fa-plus"></i></a>
+                                                </span>
+                                            </td>
                                             <td class="product-subtotal" id="totalPriceOneItem">{{this.price}} vnđ</td>
                                             <td class="product-remove"><a href="/carts/listcart/remove/{{this.item._id}}">X</a></td>
                                         </tr>
@@ -59,11 +72,18 @@
                 {{else}}
                 <section class="my_account_area pt--80 pb--55 bg--white">
 			        <div class="container  center_login_register">
+                        {{#if message}}
+                        <div class="col-6 text-center ">
+                            <div class="alert alert-success">
+                                {{message}}
+                            </div>
+                        </div>
+                        {{/if}}
                         <div class="row">
                             <div class="col-6 text-center ">
                                 Không có sản phẩm nào trong giỏ hàng
                             </div>
-                        </div>
+                        </div>                        
                     </div>
                 </section>
                 {{/if}}
