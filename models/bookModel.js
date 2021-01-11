@@ -41,7 +41,7 @@ exports.listbook = async (filter, pageNumber, itemPerPage, sort ) => {
     const sortOrderArr = [1,-1,1,-1];
     let books;
 
-    if (sort ===0 || sort===1)
+    if (sort ===2 || sort===3)
     {
         books = await booksCollection.paginate(filter, {
             page: pageNumber,

@@ -22,9 +22,9 @@ function showUnsignedString(search) {
 exports.index = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const search = req.query.search;
-    const sort= parseInt(req.query.sort) || 2;
+    const sort= parseInt(req.query.sort) || 0;
 
-    const nameSortArr = ["Giá tăng dần", "Giá giảm dần", "Từ A->Z", "Từ Z->A"];
+    const nameSortArr = ["Từ A->Z", "Từ Z->A", "Giá tăng dần", "Giá giảm dần"];
 
     var nameCat =  "Thể loại";
     var catid = req.query.catid;
