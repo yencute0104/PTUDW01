@@ -168,10 +168,10 @@
 														{{/if}}
 													</div>										
 													<div class="content">
-														<div class="comnt__author d-block d-sm-flex">
-															<span><a href="#">{{nickname}}</a> Post author</span>
+														<div class="comnt__author d-block d-sm-flex">															
+															<span><a>{{nickname}}</a> Post author</span>															
 															<div class="reply__btn">
-																<a href="#"></a>
+																<a ></a>
 															</div>
 														</div>
 														<p>{{content}}</p>
@@ -241,7 +241,7 @@
 											<div><label><b>{{user.username}}</b></label> </div> --}}
 											{{!-- <span>Tên của bạn</span><input id="nickname_field" type="text" name="nickname"> --}}
 										{{else}}
-											<span>Tên của bạn</span><input id="nickname_field" type="text" name="nickname" value="{{nickname}}" placeholder="Nhập tên của bạn ở đây">
+											<span>Tên của bạn</span><input id="nickname_field" type="text" name="nickname" value="{{nickname}}" placeholder="Nhập tên của bạn ở đây" required>
 											{{#if err}}
 											<br>
 												<div class="alert alert-danger">
@@ -252,7 +252,7 @@
 									</div>
 									<div class="input__box">
 										<span>Bình luận</span>
-										<textarea name="content" placeholder="Nhập bình luận ở đây">{{content}}</textarea>
+										<textarea name="content" placeholder="Nhập bình luận ở đây" required>{{content}}</textarea>
 									</div>
 									<div class="review-form-actions">
 										<button class="btn border button" type="submit" >Gửi bình luận</button>
