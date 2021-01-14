@@ -6,6 +6,16 @@
 							<h3 class="account__title">Login</h3>
 							<form action="/users/login" method="post"> 
 								<div class="account__form">
+									{{#if error_msg}}
+										<div class="alert alert-danger">
+											{{error_msg}}
+										</div>
+									{{/if}}
+									{{#if success_msg}}
+										<div class="alert alert-success">
+											{{success_msg}}
+										</div>
+									{{/if}}
 									<div class="input__box">
 										<label>Username <span>*</span></label>
 										<input type="text" name="username" value="{{username}}" required>
@@ -22,6 +32,7 @@
 											<span>Remember me</span>
 										</label>
 									</div>
+									<br>
 										<a href="/users/auth/google">Sign In with Google</a>
 									<br>
 									{{#if hasErr}}
@@ -29,7 +40,8 @@
 											{{message}}
 										</div>
 									{{/if}}
-									<a class="forget_pass" href="/users/forget">Lost your password?</a>
+									
+									<a class="forget_pass" href="/users/forget">Quên mật khẩu?</a>
 								</div>
 							</form>
 						</div>

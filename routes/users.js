@@ -21,7 +21,9 @@ router.get('/switch_login', function(req, res, next){
 // hiển thị form đăng nhập
 router.get('/login', function(req, res, next){
   const message = req.flash('error');
-  res.render('users/login',{title: 'Đăng nhập', message, hasErr: message.length > 0});
+  const success_msg = req.flash('success_msg');
+  const error_msg = req.flash('error_msg');
+  res.render('users/login',{title: 'Đăng nhập', message, hasErr: message.length > 0,success_msg,error_msg});
 });
 
 // kiểm tra thông tin đăng nhập
@@ -37,15 +39,18 @@ router.get('/register', function(req, res, next){
 
 router.post('/register', userController.addUser);
 
+// hiển thị trang quên mật khẩu
 router.get('/forget', isNotLogined, function(req, res, next){
-  res.render('users/forget',{title: 'Lấy lại mật khẩu'});
+  const success_msg = req.flash('success_msg');
+  const error_msg =  req.flash('error_msg');
+  res.render('users/forget',{title: 'Quên mật khẩu', success_msg, error_msg});
 })
 router.post('/forget', userController.forget_pw);
 
 router.get('/forget/:token', userController.reset_pw);
 
 router.get('/reset/:id', isNotLogined, function(req, res, next){
-  res.render('users/reset');
+  res.render('users/reset', {title: 'Đổi mật khẩu'});
 });
 router.post('/reset/:id', userController.reset);
 

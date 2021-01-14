@@ -221,100 +221,83 @@ exports.forget_pw = async (req, res, next) => {
 
     const { email, username } = req.body;
 
-    let errors = [];
+    let error_msg;
 
-    //------------ Checking required fields ------------//
-    if (!email || !username) {
-        errors.push({ msg: 'Vui lòng điền đủ thông tin' });
-    }
+    const user = await userModel.get(username, email);
+        if (!user) {
+            //------------ User already exists ------------//
+            error_msg = 'Không tồn tại username hoặc email';
+            res.render('users/forget', {
+                error_msg,
+                title: 'Quên mật khẩu',
+                email,
+                username
+            });
+        } else {
 
-    if (errors.length > 0) {
-        res.render('users/forget', {
-            errors,
-            email,
-            username
-        });
-    } else {
-        const user = await userModel.get(username, email);
-            if (!user) {
-                //------------ User already exists ------------//
-                errors.push({ msg: 'Không tồn tại username hoặc email' });
-                res.render('users/forget', {
-                    errors,
-                    email,
-                    username
-                });
-            } else {
+            const oauth2Client = new OAuth2(
+                "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com", // ClientID
+                "OKXIYR14wBB_zumf30EC__iJ", // Client Secret
+                "https://developers.google.com/oauthplayground" // Redirect URL
+            );
 
-                const oauth2Client = new OAuth2(
-                    "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com", // ClientID
-                    "OKXIYR14wBB_zumf30EC__iJ", // Client Secret
-                    "https://developers.google.com/oauthplayground" // Redirect URL
-                );
+            oauth2Client.setCredentials({
+                refresh_token: "1//04T_nqlj9UVrVCgYIARAAGAQSNwF-L9IrGm-NOdEKBOakzMn1cbbCHgg2ivkad3Q_hMyBkSQen0b5ABfR8kPR18aOoqhRrSlPm9w"
+            });
+            const accessToken = oauth2Client.getAccessToken()
 
-                oauth2Client.setCredentials({
-                    refresh_token: "1//04T_nqlj9UVrVCgYIARAAGAQSNwF-L9IrGm-NOdEKBOakzMn1cbbCHgg2ivkad3Q_hMyBkSQen0b5ABfR8kPR18aOoqhRrSlPm9w"
-                });
-                const accessToken = oauth2Client.getAccessToken()
+            const token = jwt.sign({ _id: user._id }, JWT_RESET_KEY, { expiresIn: '30m' });
+            
+            const CLIENT_URL = 'http://' + req.headers.host;
+            const output = `
+            <h2>Click vào link dưới đây để reset mật khẩu</h2>
+            <p>${CLIENT_URL}/users/forget/${token}</p>
+            <p><b>CHÚ Ý: </b> Link chỉ tồn tại 30 phút</p>
+            `;
 
-                const token = jwt.sign({ _id: user._id }, JWT_RESET_KEY, { expiresIn: '30m' });
-                
-                const CLIENT_URL = 'http://' + req.headers.host;
-                const output = `
-                <h2>Please click on below link to reset your account password</h2>
-                <p>${CLIENT_URL}/users/forget/${token}</p>
-                <p><b>NOTE: </b> The activation link expires in 30 minutes.</p>
-                `;
+            const kt = await userModel.update_resetpw(username,token);
+            if (kt)
+            {
+                    const transporter = nodemailer.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            type: "OAuth2",
+                            user: "nodejsa@gmail.com",
+                            clientId: "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com",
+                            clientSecret: "OKXIYR14wBB_zumf30EC__iJ",
+                            refreshToken: "1//04T_nqlj9UVrVCgYIARAAGAQSNwF-L9IrGm-NOdEKBOakzMn1cbbCHgg2ivkad3Q_hMyBkSQen0b5ABfR8kPR18aOoqhRrSlPm9w",
+                            accessToken: accessToken
+                        },
+                    });
 
-                const kt = await userModel.update_resetpw(username,token);
-                if (kt)
-                {
-                        const transporter = nodemailer.createTransport({
-                            service: 'gmail',
-                            auth: {
-                                type: "OAuth2",
-                                user: "nodejsa@gmail.com",
-                                clientId: "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com",
-                                clientSecret: "OKXIYR14wBB_zumf30EC__iJ",
-                                refreshToken: "1//04T_nqlj9UVrVCgYIARAAGAQSNwF-L9IrGm-NOdEKBOakzMn1cbbCHgg2ivkad3Q_hMyBkSQen0b5ABfR8kPR18aOoqhRrSlPm9w",
-                                accessToken: accessToken
-                            },
-                        });
+                    // send mail with defined transport object
+                    const mailOptions = {
+                        from: '"Thế giới sách Admin" <nodejsa@gmail.com>', // sender address
+                        to: email, // list of receivers
+                        subject: "Reset mật khẩu cho tài khoản", // Subject line
+                        html: output, // html body
+                    };
 
-                        // send mail with defined transport object
-                        const mailOptions = {
-                            from: '"Auth Admin" <nodejsa@gmail.com>', // sender address
-                            to: email, // list of receivers
-                            subject: "Account Password Reset: NodeJS Auth ✔", // Subject line
-                            html: output, // html body
-                        };
-
-                        transporter.sendMail(mailOptions, (error, info) => {
-                            if (error) {
-                                console.log(error);
-                                req.flash(
-                                    'error_msg',
-                                    'Something went wrong on our end. Please try again later.'
-                                );
-                                res.redirect('/users/forget');
-                            }
-                            else {
-                                console.log('Mail sent : %s', info.response);
-                                req.flash(
-                                    'success_msg',
-                                    'Password reset link sent to email ID. Please follow the instructions.'
-                                );
-                                res.redirect('/users/login');
-                            }
-                        })
-                    }
+                    transporter.sendMail(mailOptions, (error, info) => {
+                        if (error) {
+                            console.log(error);
+                            req.flash(
+                                'error_msg',
+                                'Có vấn đề xảy ra, vui lòng thử lại sau.'
+                            );
+                            res.redirect('/users/forget');
+                        }
+                        else {
+                            console.log('Mail sent : %s', info.response);
+                            req.flash(
+                                'success_msg',
+                                'Link reset mật khẩu đã được gửi qua mail, vui lòng kiểm tra mail.'
+                            );
+                            res.redirect('/users/login');
+                        }
+                    })
                 }
-
             }
-     
-    // await transport.sendMail(resetEmail);
-    // req.flash('info', `An e-mail has been sent to ${user.email} with further instructions.`);
-    // res.redirect('../forgot');
 };
 
 
@@ -366,9 +349,8 @@ exports.reset_pw = async(req, res, next)=>{
             if (err) {
                 req.flash(
                     'error_msg',
-                    'Incorrect or expired link! Please try again.'
+                    'Link đã hết hạn'
                 );
-                console.log("hello");
                 res.redirect('/users/login');
             }
             else {
@@ -379,7 +361,7 @@ exports.reset_pw = async(req, res, next)=>{
                     {
                         req.flash(
                             'error_msg',
-                            'User with email ID does not exist! Please try again.'
+                            'Username hoặc email không tồn tại'
                         );
                         res.redirect('/users/login');
                     }

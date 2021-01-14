@@ -23,9 +23,9 @@
                                 <label>Email <span>*</span></label>
                                 <input type="email" name="email" value="{{email}}" required>
                             </div>
-                            {{#if errors}}
+                            {{#if error_msg}}
                                 <div class="alert alert-danger">
-                                    {{errors}}
+                                    {{error_msg}}
                                 </div>
                             {{/if}}
                             <div class="form__btn">
