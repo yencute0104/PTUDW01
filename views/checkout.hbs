@@ -21,7 +21,7 @@
 	        						</div>
                                     <div class="input_box space_between">
 										<label>Số điện thoại <span>*</span></label>
-										<input type="text" name="phone" value="{{user.phone}}" required>
+										<input type="tel" pattern="[0]{1}[0-9]{9}||[0]{1}[0-9]{10}" name="phone" value="{{user.phone}}" required>
 									</div>
         						</div>
                                 <div class="customer_details mt--20">

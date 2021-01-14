@@ -17,11 +17,20 @@
 				<div class="row masonry__wrap">
                     {{#eq count 0}}
                     <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 col-12 gallery__item cat--1 cat--2 cat--3">
-                        <p class="d-flex justify-content-center">Không có đơn hàng.</p>
+                        
+                        <p class="d-flex justify-content-center">Chưa có đơn hàng.</p>
                     </div>
                     {{/eq}}
 					<!-- Đơn hàng đợi xử lý -->
 					<div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 col-12 gallery__item cat--1">
+                        {{#not orders_pending}}
+                            <div class="row">
+                                <div class="col-lg-6 offset-lg-6"> 
+                                <p class="d-flex justify-content-center">Chưa có đơn hàng.</p>
+                                </div>
+                            </div>
+                              
+                        {{/not}}
                             {{#each orders_pending}}
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12 ol-lg-12">
@@ -64,6 +73,14 @@
                     <!-- Đơn hàng đang giao -->
 					<div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 col-12 gallery__item cat--2">
                        
+                            {{#not orders_delivering}}
+                                 <div class="row">
+                                    <div class="col-lg-6 offset-lg-6">
+                                    <p class="d-flex justify-content-center">Chưa có đơn hàng.</p>
+                                    </div>
+                                 </div>
+                              
+                            {{/not}}
                             {{#each orders_delivering}}
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12 ol-lg-12">
@@ -105,7 +122,14 @@
 					<!-- End Single Portfolio -->
 
 					<!-- Đơn hàng đã giao -->
-					<div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 col-12 gallery__item cat--3">                       
+					<div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 col-12 gallery__item cat--3">    
+                        {{#not orders_delivered}}
+                          <div class="row">
+                                <div class="col-lg-6 offset-lg-6">   
+                                <p class="d-flex justify-content-center">Chưa có đơn hàng.</p>
+                                </div>
+                          </div>                              
+                        {{/not}}                   
                             {{#each orders_delivered}}                                                           
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12 ol-lg-12">
@@ -146,7 +170,17 @@
 					</div>
 
                     	<!-- Đơn hàng đã hủy -->
-					<div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 col-12 gallery__item cat--4">                       
+					<div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 col-12 gallery__item cat--4">        
+                        {{#not orders_canceled}}
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="table-content wnro__table table-responsive">
+                                        <p class="d-flex justify-content-center">Chưa có đơn hàng.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        {{/not}}   
                             {{#each orders_canceled}}                                                           
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12 ol-lg-12">

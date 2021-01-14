@@ -103,6 +103,14 @@ exports.update_profile = async(req, res, next) => {
           next(err);
           return;
         }
+
+        // update email ko hợp lệ
+        const email = fields.txtEmail;
+        if (!validateEmail(email))
+        {
+            return res.render('users/profile',{title: 'Profile', message: "Email không hợp lệ!"});
+        }
+
         const coverImage = files.txtProfilePic;
         const imageType = ["image/png", "image/jpeg"];
 
@@ -138,6 +146,8 @@ exports.update_profile = async(req, res, next) => {
 exports.addUser = async (req, res) => {
  
     const {username, email, password, repassword} = req.body;
+
+
 
     const newUser = {
         username,
