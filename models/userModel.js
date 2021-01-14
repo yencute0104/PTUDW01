@@ -3,10 +3,10 @@ const bcrypt = require('bcrypt');
 
 const userCollection = require('./MongooseModel/userMongooseModel');
 
-exports.update_resetpw = async(user, token) => {
-    await userCollection.updateOne({username: user.username}, 
-        {resetPasswordToken : token,
-        resetPasswordExpires : Date.now() + 3600000})
+exports.update_resetpw = async(username,token) => {
+    return await userCollection.updateOne({username: username},
+        {resetPasswordToken : token})
+        // resetPasswordExpires : Date.now() + 3600000})
 }
 exports.find = async(token) => {
     const user = userCollection.findOne({resetPasswordExpires: {$gt:  Date.now()}});
@@ -70,6 +70,27 @@ exports.change_password = async (username, newPassword) => {
         bcrypt.hash(newPassword, salt, function(err, hash) {
             let user = userCollection.updateOne(
                 {username: username},
+                {password: hash}
+                
+            );
+            user
+            .update()
+            .then((doc)=>{})
+            .then((err)=>{
+                console.log(err);
+            });
+        });
+    });
+    return;
+}
+
+
+exports.change_password_byID = async (id, newPassword) => {
+    const saltRounds = 10;
+    bcrypt.genSalt(saltRounds, function(err, salt) {
+        bcrypt.hash(newPassword, salt, function(err, hash) {
+            let user = userCollection.updateOne(
+                {_id: id},
                 {password: hash}
                 
             );

@@ -9,12 +9,15 @@ const userController = require('../controllers/userController');
 const listbookRouter = require('../routes/listbook');
 const userRouter = require('../routes/users');
 
-/* GET list of books. */
+
+// hiển thị trang chủ
 router.get('/', indexController.index);
 router.get('/home', indexController.index);
 
+// điều hướng về booksrouter, xử lý các hoạt động liên quan tới ds sp
 router.use('/listbook', listbookRouter);
-router.use('/account',userRouter);
+
+// xem chi tiết 1 sản phẩm ngoài trang chủ
 router.get('/:id',listController.detail );
 
 module.exports = router;

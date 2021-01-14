@@ -3,19 +3,13 @@ const fs = require('fs');
 const formidable = require('formidable');
 const cloudinary = require('cloudinary').v2;
 const fileupload = require('express-fileupload');
-const crypto = require('crypto'); 
-const { promisify } = require('util');
-const nodemailer = require('nodemailer');
-const nodemailerSendgrid = require('nodemailer-sendgrid-transport');
-// const transport = nodemailer.createTransport('SMTP', {service: 'Gmail',
-//     auth: {
-//   user: "yencute0104@gmail.com",  // my actual email address here
-//   pass: "tanghoangyen"   // my actual password here
-// }
-//     // auth: {
-//     // api_key: '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'}
-// });
 
+const nodemailer = require('nodemailer');
+const { google } = require('googleapis');
+const OAuth2 = google.auth.OAuth2;
+const jwt = require('jsonwebtoken');
+const JWT_KEY = "jwtactive987";
+const JWT_RESET_KEY = "jwtreset987";
 function showUnsignedString(search) {
     var signedChars = "àảãáạăằẳẵắặâầẩẫấậđèẻẽéẹêềểễếệìỉĩíịòỏõóọôồổỗốộơờởỡớợùủũúụưừửữứựỳỷỹýỵÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬĐÈẺẼÉẸÊỀỂỄẾỆÌỈĨÍỊÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢÙỦŨÚỤƯỪỬỮỨỰỲỶỸÝỴ";
     var unsignedChars = "aaaaaaaaaaaaaaaaadeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyAAAAAAAAAAAAAAAAADEEEEEEEEEEEIIIIIOOOOOOOOOOOOOOOOOUUUUUUUUUUUYYYYY";
@@ -225,75 +219,178 @@ exports.addUser = async (req, res) => {
 
 exports.forget_pw = async (req, res, next) => {
 
-    const token = (crypto.randomBytes)(20).toString('hex');
-    // const existUsername = await userModel.getNameUser(req.body.username);
-    // const existEmail = await userModel.getEmailUser(req.body.email);
-    // var user = (existUsername && existEmail);
+    const { email, username } = req.body;
 
-    const user = await userModel.get(req.body.username, req.body.email);
+    let errors = [];
 
-    if (!user) {
-        req.flash('error', 'No account with that email address exists.');
-        return res.redirect('../forgot');
+    //------------ Checking required fields ------------//
+    if (!email || !username) {
+        errors.push({ msg: 'Vui lòng điền đủ thông tin' });
     }
 
-    await userModel.update_resetpw(user, token);
-    //http://${req.headers.host}/reset/${token}
-    const resetEmail = {
-        to: user.email,
-        from: 'yencute0104@gmail.com',
-        subject: 'Đổi mật khẩu',
-        text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.
-        Please click on the following link, or paste this into your browser to complete the process:
-        http://localhost:4000/users/reset/${token}
-        If you did not request this, please ignore this email and your password will remain unchanged.`,
-    };
+    if (errors.length > 0) {
+        res.render('users/forget', {
+            errors,
+            email,
+            username
+        });
+    } else {
+        const user = await userModel.get(username, email);
+            if (!user) {
+                //------------ User already exists ------------//
+                errors.push({ msg: 'Không tồn tại username hoặc email' });
+                res.render('users/forget', {
+                    errors,
+                    email,
+                    username
+                });
+            } else {
 
-    await transport.sendMail(resetEmail);
-    req.flash('info', `An e-mail has been sent to ${user.email} with further instructions.`);
-    res.redirect('../forgot');
+                const oauth2Client = new OAuth2(
+                    "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com", // ClientID
+                    "OKXIYR14wBB_zumf30EC__iJ", // Client Secret
+                    "https://developers.google.com/oauthplayground" // Redirect URL
+                );
+
+                oauth2Client.setCredentials({
+                    refresh_token: "1//04T_nqlj9UVrVCgYIARAAGAQSNwF-L9IrGm-NOdEKBOakzMn1cbbCHgg2ivkad3Q_hMyBkSQen0b5ABfR8kPR18aOoqhRrSlPm9w"
+                });
+                const accessToken = oauth2Client.getAccessToken()
+
+                const token = jwt.sign({ _id: user._id }, JWT_RESET_KEY, { expiresIn: '30m' });
+                
+                const CLIENT_URL = 'http://' + req.headers.host;
+                const output = `
+                <h2>Please click on below link to reset your account password</h2>
+                <p>${CLIENT_URL}/users/forget/${token}</p>
+                <p><b>NOTE: </b> The activation link expires in 30 minutes.</p>
+                `;
+
+                const kt = await userModel.update_resetpw(username,token);
+                if (kt)
+                {
+                        const transporter = nodemailer.createTransport({
+                            service: 'gmail',
+                            auth: {
+                                type: "OAuth2",
+                                user: "nodejsa@gmail.com",
+                                clientId: "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com",
+                                clientSecret: "OKXIYR14wBB_zumf30EC__iJ",
+                                refreshToken: "1//04T_nqlj9UVrVCgYIARAAGAQSNwF-L9IrGm-NOdEKBOakzMn1cbbCHgg2ivkad3Q_hMyBkSQen0b5ABfR8kPR18aOoqhRrSlPm9w",
+                                accessToken: accessToken
+                            },
+                        });
+
+                        // send mail with defined transport object
+                        const mailOptions = {
+                            from: '"Auth Admin" <nodejsa@gmail.com>', // sender address
+                            to: email, // list of receivers
+                            subject: "Account Password Reset: NodeJS Auth ✔", // Subject line
+                            html: output, // html body
+                        };
+
+                        transporter.sendMail(mailOptions, (error, info) => {
+                            if (error) {
+                                console.log(error);
+                                req.flash(
+                                    'error_msg',
+                                    'Something went wrong on our end. Please try again later.'
+                                );
+                                res.redirect('/users/forget');
+                            }
+                            else {
+                                console.log('Mail sent : %s', info.response);
+                                req.flash(
+                                    'success_msg',
+                                    'Password reset link sent to email ID. Please follow the instructions.'
+                                );
+                                res.redirect('/users/login');
+                            }
+                        })
+                    }
+                }
+
+            }
+     
+    // await transport.sendMail(resetEmail);
+    // req.flash('info', `An e-mail has been sent to ${user.email} with further instructions.`);
+    // res.redirect('../forgot');
 };
 
 
 exports.reset = async(req, res, next)=> {
-    const user = await userModel.find(req.params.token);
+    const {newPassword, renewPassword} = req.body;
     
-      if (!user) {
-        req.flash('error', 'Password reset token is invalid or has expired.');
-        return res.redirect('../forgot');
-      }
-    
-      //res.setHeader('Content-type', 'text/html');
-    //   res.end(templates.layout(`
-    //     ${templates.error(req.flash())}
-    //     ${templates.resetPassword(user.resetPasswordToken)}
-    //   `));
-    res.rend();
+    try
+    {
+      
+        if (newPassword != showUnsignedString(newPassword))
+        {
+            throw("Mật khẩu không được có dấu");
+            return;
+        }
+
+        if (newPassword.includes(' '))
+        {
+            throw("Mật khấu không được chứa khoảng trắng");
+            return;
+        }
+
+        if (newPassword.length <8)
+        {
+            throw("Mật khấu chứa ít nhất 8 kí tự");
+            return;
+        }
+
+        if (newPassword != renewPassword)
+        {
+            throw("Mật khấu nhập lại không đúng");
+            return;
+        }
+
+        await userModel.change_password_byID(req.params.id, newPassword);
+        res.render('users/reset', {title: 'Đổi mật khẩu', messageSuccess: "Đổi mật khẩu thành công!"});
+    }
+    catch (err)
+    {
+        res.render('users/reset',{ title: 'Đổi mật khẩu', message: err}); 
+    }
+   
 };
 
 exports.reset_pw = async(req, res, next)=>{
-    const user = await userModel.find(req.params.token);
-    
-      if (!user) {
-        req.flash('error', 'Password reset token is invalid or has expired.');
-        return res.redirect('/forgot');
-      }
-    
-      user.password = req.body.password;
-      delete user.resetPasswordToken;
-      delete user.resetPasswordExpires;
-    
-      const resetEmail = {
-        to: user.email,
-        from: 'passwordreset@example.com',
-        subject: 'Your password has been changed',
-        text: `
-          This is a confirmation that the password for your account "${user.email}" has just been changed.
-        `,
-      };
-    
-      await transport.sendMail(resetEmail);
-      req.flash('success', `Success! Your password has been changed.`);
-    
-      res.redirect('/');
+    const token  = req.params.token;
+
+    if (token) {
+        jwt.verify(token, JWT_RESET_KEY, async (err, decodedToken) => {
+            if (err) {
+                req.flash(
+                    'error_msg',
+                    'Incorrect or expired link! Please try again.'
+                );
+                console.log("hello");
+                res.redirect('/users/login');
+            }
+            else {
+                const id = decodedToken._id;
+                
+                const kt = await userModel.getUser(id);
+                if (!kt) 
+                    {
+                        req.flash(
+                            'error_msg',
+                            'User with email ID does not exist! Please try again.'
+                        );
+                        res.redirect('/users/login');
+                    }
+                    else {
+                        res.redirect('/users/reset/' + id);
+                    }
+                }})
+            
+        }
+ 
+    else {
+        console.log("Password reset error!")
+    }
 };

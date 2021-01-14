@@ -33,7 +33,6 @@ cloudinary.config({
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const booksRouter = require('./routes/home');
 const listbookRouter = require('./routes/listbook');
 const cartRouter = require('./routes/cart');
 

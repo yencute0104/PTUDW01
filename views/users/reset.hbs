@@ -1,0 +1,40 @@
+<section class="my_account_area pt--80 pb--55 bg--white">
+        <div class="container  center_login_register">
+            <div class="row ">
+                <div class="col-6 text-center ">
+                    <div class="my__account__wrapper">
+                        <h3 class="account__title">Đổi mật khẩu</h3>
+                        <div class="input__box ">
+                                    {{#if messageSuccess}}
+                                    <div class="alert alert-success">
+                                        {{messageSuccess}}
+                                    </div>
+                                    {{/if}}
+                        </div>       
+                        <form method="post"> 
+                            <div class="account__form">                              
+                                <div class="input__box ">
+                                    <label>Mật khẩu mới <span>*</span></label>
+                                    <input type="password"  name="newPassword" value="{{newPassword}}" required>
+                                </div>
+                                <div class="input__box ">
+                                    <label>Nhập lại mật khẩu mới <span>*</span></label>
+                                    <input type="password" name="renewPassword" value="{{renewPassword}}" required>
+                                </div>
+                                <div class="input__box ">
+                                    {{#if message}}
+                                    <div class="alert alert-danger">
+                                        {{message}}
+                                    </div>
+                                    {{/if}}
+                                </div>        
+                                <div class="form__btn">
+                                    <button type="submit">Lưu thay đổi</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
