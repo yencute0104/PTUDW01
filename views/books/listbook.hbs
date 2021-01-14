@@ -33,8 +33,16 @@
                             <div class="shop__list nav justify-content-center" role="tablist">
                                 <a class="nav-item nav-link active" data-toggle="tab" href="#nav-grid" role="tab"><i class="fa fa-th"></i></a>
                                 <a class="nav-item nav-link" data-toggle="tab" href="#nav-list" role="tab"><i class="fa fa-list"></i></a>
+                                 {{#if search}}
+                                <strong>Kết quả tìm kiếm với từ khóa &quot{{search}}&quot: </strong>
+                                {{/if}}
+                                {{#if hasCat}}
+                                <strong>Kết quả lọc theo thể loại &quot{{nameCat}}&quot: </strong>                                
+                                {{/if}}
+                                <strong> &nbsp; &nbsp;{{totalBooks}} sản phẩm </strong>
                             </div>
-                            <p>Số lượng: {{totalBooks}} sản phẩm </p>
+                           
+                            
                             <div class="orderby__wrapper">
                                 <span>Sắp xếp</span>
                                <div class="btn-group">

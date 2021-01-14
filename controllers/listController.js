@@ -26,7 +26,7 @@ exports.index = async (req, res, next) => {
 
     const nameSortArr = ["Từ A->Z", "Từ Z->A", "Giá tăng dần", "Giá giảm dần"];
 
-    var nameCat =  "Thể loại";
+    var nameCat =  "Tất cả";
     var catid = req.query.catid;
 
     if (catid)
@@ -89,6 +89,9 @@ exports.index = async (req, res, next) => {
         }
     }
     
+    let hasCat = false;
+    if (nameCat != "Tất cả")
+         hasCat = true;
     const paginate = await bookModel.listbook(filter,page,item_per_page, sort);
     const category =  await bookModel.listcategory();
 
@@ -103,6 +106,8 @@ exports.index = async (req, res, next) => {
         books: paginate.docs,
         totalBooks: paginate.totalDocs,
         category,
+        search,
+        hasCat,
         nameCat,
         catID,
         nameSort: nameSortArr[sort],
