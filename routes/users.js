@@ -45,13 +45,19 @@ router.get('/forget', isNotLogined, function(req, res, next){
   const error_msg =  req.flash('error_msg');
   res.render('users/forget',{title: 'Quên mật khẩu', success_msg, error_msg});
 })
+
+// lấy thông tin người dùng nhập vào để kiểm tra hợp lệ, nếu có => gửi mail
 router.post('/forget', userController.forget_pw);
 
+// kiểm tra link từ mail người dùng có hợp lệ
 router.get('/forget/:token', userController.reset_pw);
 
+// link hợp lệ thì hiện form đổi mật khẩu
 router.get('/reset/:id', isNotLogined, function(req, res, next){
   res.render('users/reset', {title: 'Đổi mật khẩu'});
 });
+
+// thực hiện đổi mật khẩu
 router.post('/reset/:id', userController.reset);
 
 // router.get('/auth/google',
