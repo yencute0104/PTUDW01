@@ -141,15 +141,6 @@ exports.addUser = async (req, res) => {
  
     const {username, email, password, repassword} = req.body;
 
-
-
-    const newUser = {
-        username,
-        email,
-        password,
-        repassword
-    };
-
     try {
         req.checkBody('password','Mật khẩu phải có ít nhất 8 kí tự').isLength({min:8});
         const err = req.validationErrors();
@@ -186,8 +177,69 @@ exports.addUser = async (req, res) => {
                 
                 if (password === repassword)
                 {
-                    await userModel.addUser(newUser);
-                    res.render('users/register',{title: "Đăng ký", messageSuccess: "Đăng ký thành công!" });
+                    const oauth2Client = new OAuth2(
+                        "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com", // ClientID
+                        "OKXIYR14wBB_zumf30EC__iJ", // Client Secret
+                        "https://developers.google.com/oauthplayground" // Redirect URL
+                    );
+        
+                    oauth2Client.setCredentials({
+                        refresh_token: "1//04T_nqlj9UVrVCgYIARAAGAQSNwF-L9IrGm-NOdEKBOakzMn1cbbCHgg2ivkad3Q_hMyBkSQen0b5ABfR8kPR18aOoqhRrSlPm9w"
+                    });
+                    const accessToken = oauth2Client.getAccessToken()
+        
+                    const token = jwt.sign({username, email, password}, JWT_RESET_KEY, { expiresIn: '30m' });
+                    
+                    const CLIENT_URL = 'http://' + req.headers.host;
+                    const output = `
+                    <h2>Click vào link dưới đây để kích hoạt tài khoản</h2>
+                    <p>${CLIENT_URL}/users/activate/${token}</p>
+                    <p><b>CHÚ Ý: </b> Link chỉ tồn tại 30 phút</p>
+                    `;
+        
+                    const kt = await userModel.update_resetpw(username,token);
+                    if (kt)
+                    {
+                        const transporter = nodemailer.createTransport({
+                            service: 'gmail',
+                            auth: {
+                                type: "OAuth2",
+                                user: "nodejsa@gmail.com",
+                                clientId: "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com",
+                                clientSecret: "OKXIYR14wBB_zumf30EC__iJ",
+                                refreshToken: "1//04T_nqlj9UVrVCgYIARAAGAQSNwF-L9IrGm-NOdEKBOakzMn1cbbCHgg2ivkad3Q_hMyBkSQen0b5ABfR8kPR18aOoqhRrSlPm9w",
+                                accessToken: accessToken
+                            },
+                        });
+    
+                        // send mail with defined transport object
+                        const mailOptions = {
+                            from: '"Thế giới sách Admin" <nodejsa@gmail.com>', // sender address
+                            to: email, // list of receivers
+                            subject: "Kích hoạt email cho tài khoản", // Subject line
+                            html: output, // html body
+                        };
+    
+                        transporter.sendMail(mailOptions, (error, info) => {
+                            if (error) {
+                                console.log(error);
+                                req.flash(
+                                    'error_msg',
+                                    'Có vấn đề xảy ra, vui lòng thử lại sau.'
+                                );
+                                res.redirect('/users/login');
+                            }
+                            else {
+                                console.log('Mail sent : %s', info.response);
+                                req.flash(
+                                    'success_msg',
+                                    'Link kích hoạt tài khoản đã được gửi qua mail, vui lòng kiểm tra mail.'
+                                );
+                                res.redirect('/users/login');
+                            }
+                        })
+                    }
+                   
                     // res.redirect('/users/login');
                 }
                 else
@@ -216,6 +268,36 @@ exports.addUser = async (req, res) => {
     }
 };
 
+exports.activate = async (req, res, next) => {
+    const token  = req.params.token;
+
+    if (token) {
+        jwt.verify(token, JWT_RESET_KEY, async (err, decodedToken) => {
+            if (err) {
+                req.flash(
+                    'error_msg',
+                    'Link đã hết hạn'
+                );
+                res.redirect('/users/register');
+            }
+            else {
+                const {username, email, password} = decodedToken;
+                const newUser = {
+                    username,
+                    email,
+                    password
+                };
+                await userModel.addUser(newUser);
+                res.render('users/register',{title: "Đăng ký", messageSuccess: "Đăng ký thành công!" });
+
+            
+        }
+    })
+    }
+    else {
+        console.log("Lỗi kích hoạt email");
+    }
+}
 
 exports.forget_pw = async (req, res, next) => {
 

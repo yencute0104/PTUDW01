@@ -34,7 +34,8 @@ router.post('/login', passport.authenticate('local', {
 
 // hiển thị form đăng ký
 router.get('/register', function(req, res, next){
-  res.render('users/register',{title: 'Đăng ký'});
+  const error_msg = req.flash('error_msg');
+  res.render('users/register',{title: 'Đăng ký', error_msg});
 })
 
 router.post('/register', userController.addUser);
@@ -60,6 +61,7 @@ router.get('/reset/:id', isNotLogined, function(req, res, next){
 // thực hiện đổi mật khẩu
 router.post('/reset/:id', userController.reset);
 
+router.get('/activate/:token', userController.activate);
 // router.get('/auth/google',
 //   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
